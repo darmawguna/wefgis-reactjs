@@ -1,0 +1,49 @@
+.menu-item:hover,
+.btn:hover {
+    background-color: #34495e;
+    color: #f39c12;
+}
+
+.sidebar {
+    width: 5vw;
+    /* ukuran default sidebar */
+    transition: width 0.5s;
+    /* animasi perubahan ukuran */
+}
+
+.sidebar:hover {
+    width: 20vw;
+    /* ukuran sidebar ketika dihover */
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.sidebar:hover+.overlay {
+    display: block;
+}
+
+.custom-layer-control {
+    /* Style the container here */
+    background-color: #fff;
+    /* Or any desired background color */
+    border: 1px solid #ddd;
+    /* Add a border */
+    padding: 10px;
+    /* Add padding */
+    border-radius: 5px;
+    /* Add rounded corners */
+}
+
+.custom-layer-control .leaflet-control-layers-selector {
+    /* Style the layer labels here */
+    font-weight: bold;
+    /* Make text bold */
+}
