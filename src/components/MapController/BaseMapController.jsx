@@ -1,5 +1,5 @@
 
-import { baseMaps } from '../utils/basemap'; // Pastikan path ini sesuai dengan struktur project Anda
+import { baseMaps } from '../../utils/basemap'; 
 
 const BasemapController = () => {
     return (
@@ -13,6 +13,7 @@ const BasemapController = () => {
                     </label>
                 </div>
             ))}
+
         </div>
     );
 };

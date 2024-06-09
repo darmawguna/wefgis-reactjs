@@ -1,5 +1,5 @@
 
-import { overlayMaps } from '../utils/basemap'; // Pastikan path ini sesuai dengan struktur project Anda
+import { overlayMaps } from '../../utils/basemap.js'; // Pastikan path ini sesuai dengan struktur project Anda
 
 const LayerController = () => {
     return (
