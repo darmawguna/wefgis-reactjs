@@ -1,8 +1,4 @@
 import L from "leaflet";
-
-
-
-
 export const overlayMaps = [
   {
     name: "Markers",
