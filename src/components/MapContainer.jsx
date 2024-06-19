@@ -1,12 +1,16 @@
-import { MapContainer, TileLayer, useMap } from 'react-leaflet';
-import L from "leaflet";
+import { useEffect } from 'react';
+import { MapContainer, TileLayer, useMap, FeatureGroup } from 'react-leaflet';
+import { EditControl } from 'react-leaflet-draw';
+import 'leaflet-draw/dist/leaflet.draw.css';
 import 'leaflet/dist/leaflet.css';
 import ReportCard from './CardWarning';
 import SidebarController from '../layouts/map/SideBarMapController';
 import SidebarIcons from '../layouts/map/SidebarIcon';
-import { useEffect, useRef } from 'react';
 import { useMapStore } from '../store/MapStore'; // Import useMapStore from Zustand store
 import { baseMaps } from '../utils/basemap';
+import { token } from '../utils/token';
+import useWaterCanalLayerInitialization from './custom-hooks/WaterCanalHooks';
+// import useFetchWaterCanalData from './custom-hooks/WaterFetchHooks';
 
 const indonesiaCoords = [-0.7893, 113.9213]; // Center of Indonesia
 
@@ -27,31 +31,44 @@ const MapInstanceProvider = () => {
     return null;
 };
 
+const fetchWaterCanalData = async () => {
+    // const waterCanal = useMapStore((state) => state.waterCanal);
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api/water', {
+            headers: {
+                'Authorization': `Bearer ${ token }`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const result = await response.json();
+        if (result.success) {
+            useMapStore.getState().setWaterCanal(result.data);
+            console.log(result.data);
+        }
+    } catch (error) {
+        console.error('Error fetching water canal data:', error);
+    }
+};
+
 const MapComponent = () => {
-    const addLayer = useMapStore((state) => state.addLayer);
     const activeBasemap = useMapStore((state) => state.activeBasemap);
     const map = useMapStore((state) => state.map);
-    const markerLayerRef = useRef(null); // Gunakan useRef untuk markerLayer
+    const waterCanalLayer = useMapStore((state) => state.waterCanalLayer);
+    // const waterCanal = useMapStore((state) => state.waterCanal);
 
     useEffect(() => {
-        // Initialize marker layer when component mounts
-        const markers = L.layerGroup([
-            L.marker([51.5, -0.09]),
-            L.marker([51.51, -0.1])
-        ]);
-        markerLayerRef.current = markers; // Simpan di useRef
-        addLayer(markers); // Tambahkan marker layer ke layers array di state global
+        fetchWaterCanalData();
+    }, []);
+    // useFetchWaterCanalData();
 
-        return () => {
-            // Clean up marker layer when component unmounts
-            if (markerLayerRef.current) {
-                markerLayerRef.current.remove();
-            }
-        };
-    }, [addLayer]);
+    // useEffect(() => {
+    //     console.log(waterCanal);
+    // }, [waterCanal]);
+
+    useWaterCanalLayerInitialization();
 
     useEffect(() => {
-        if (map && activeBasemap && markerLayerRef.current) {
+        if (map && activeBasemap && waterCanalLayer) {
             // Remove all existing basemap layers
             baseMaps.forEach(basemap => {
                 map.removeLayer(basemap.layer);
@@ -60,10 +77,21 @@ const MapComponent = () => {
             // Add the active basemap layer to the map
             activeBasemap.layer.addTo(map);
 
-            // Add back the marker layer if it exists
-            markerLayerRef.current.addTo(map);
+            // Add back the water canal layer to the map
+            waterCanalLayer.addTo(map);
         }
-    }, [map, activeBasemap]);
+    }, [map, activeBasemap, waterCanalLayer]);
+
+
+    const onCreated = (e) => {
+        const { layerType, layer } = e;
+        if (layerType === 'marker') {
+            const { lat, lng } = layer.getLatLng();
+            console.log(`Marker created at [${ lat }, ${ lng }]`);
+        } else {
+            console.log(`Layer created: ${ layerType }`);
+        }
+    };
 
     return (
         <div className="h-full w-full relative" style={{ zIndex: '0' }}>
@@ -77,7 +105,18 @@ const MapComponent = () => {
                     />
                 )}
 
-
+                {/* Drawer untuk membuat sebuah polygon */}
+                <FeatureGroup>
+                    <EditControl
+                        position="topleft"
+                        onCreated={onCreated}
+                        draw={{
+                            rectangle: false,
+                            circle: false,
+                            circlemarker: false
+                        }}
+                    />
+                </FeatureGroup>
             </MapContainer>
             <div className='absolute top-16 right-0 z-50 mr-2'>
                 <SidebarIcons />

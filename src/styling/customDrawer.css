@@ -1,0 +1,38 @@
+/* .leaflet-draw-toolbar a {
+    color: white !important;
+    
+
+.leaflet-draw-toolbar a:hover {
+    color: #ccc !important;
+   
+} */
+
+.leaflet-draw-toolbar a:active {
+    color: white !important;
+    /* Warna font ketika ikon di-klik */
+}
+
+/* .leaflet-draw-toolbar .leaflet-draw-draw-polyline,
+.leaflet-draw-toolbar .leaflet-draw-draw-polygon,
+.leaflet-draw-toolbar .leaflet-draw-draw-rectangle,
+.leaflet-draw-toolbar .leaflet-draw-draw-circle,
+.leaflet-draw-toolbar .leaflet-draw-draw-marker,
+.leaflet-draw-toolbar .leaflet-draw-edit-edit,
+.leaflet-draw-toolbar .leaflet-draw-edit-remove {
+    background-color: rgba(0, 0, 0, 0.8);
+    
+    border-color: white;
+  
+} */
+
+/* 
+.leaflet-draw-toolbar .leaflet-draw-draw-polyline:hover,
+.leaflet-draw-toolbar .leaflet-draw-draw-polygon:hover,
+.leaflet-draw-toolbar .leaflet-draw-draw-rectangle:hover,
+.leaflet-draw-toolbar .leaflet-draw-draw-circle:hover,
+.leaflet-draw-toolbar .leaflet-draw-draw-marker:hover,
+.leaflet-draw-toolbar .leaflet-draw-edit-edit:hover,
+.leaflet-draw-toolbar .leaflet-draw-edit-remove:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    
+} */

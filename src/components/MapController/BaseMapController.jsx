@@ -7,11 +7,16 @@ const BasemapController = () => {
     const map = useMapStore((state) => state.map);
     const layers = useMapStore((state) => state.layers);
     const resetLayers = useMapStore((state) => state.resetLayers);
+    const waterCanalLayer = useMapStore((state) => state.waterCanalLayer); // New addition
 
     useEffect(() => {
         if (map) {
             activeBasemap.addTo(map);
             layers.forEach(layer => layer.addTo(map));
+
+            if (waterCanalLayer) {
+                waterCanalLayer.addTo(map); // Tambahkan kembali waterCanalLayer
+            }
             return () => {
                 map.eachLayer(layer => {
                     if (layer !== activeBasemap && !layers.includes(layer)) {
@@ -20,8 +25,7 @@ const BasemapController = () => {
                 });
             };
         }
-    }, [activeBasemap, map, layers]);
-
+    }, [activeBasemap, map, layers, waterCanalLayer]); // Add waterCanalLayer as dependency
 
     const handleBasemapChange = (layer) => {
         if (map) {
@@ -32,6 +36,9 @@ const BasemapController = () => {
             });
             resetLayers();  // Reset the layers
             setActiveBasemap(layer);
+            if (waterCanalLayer) {
+                waterCanalLayer.addTo(map); // Tambahkan kembali waterCanalLayer setelah mengubah basemap
+            }
         }
     };
 
