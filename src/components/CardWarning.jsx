@@ -1,11 +1,11 @@
 const ReportCard = ({ title, jumlahProvinsi, jumlahKabupaten, jumlahKecamatan }) => {
     let backgroundColor;
-    if (title === 'Waspada') {
-        backgroundColor = 'bg-yellow-100'; // Sesuaikan warna latar belakang sesuai kebutuhan
-    } else if (title === 'Siaga') {
-        backgroundColor = 'bg-red-100'; // Sesuaikan warna latar belakang sesuai kebutuhan
-    } else if (title === 'Awas') {
-        backgroundColor = 'bg-orange-100'; // Sesuaikan warna latar belakang sesuai kebutuhan
+    if (title === 'Alert') {
+        backgroundColor = 'bg-yellow-300'; // Sesuaikan warna latar belakang sesuai kebutuhan
+    } else if (title === 'Standby') {
+        backgroundColor = 'bg-orange-300'; // Sesuaikan warna latar belakang sesuai kebutuhan
+    } else if (title === 'Danger') {
+        backgroundColor = 'bg-red-600'; // Sesuaikan warna latar belakang sesuai kebutuhan
     }
 
     return (
@@ -19,9 +19,9 @@ const ReportCard = ({ title, jumlahProvinsi, jumlahKabupaten, jumlahKecamatan })
                     <p className="text-lg font-extrabold">{title}</p>
                 </div>
                 <div className="border-gray-300 flex flex-col gap-2 text-gray-800 flex-shrink-0 border-l pl-4">
-                    <p className="text-sm"><strong>{jumlahProvinsi} Provinsi</strong></p>
-                    <p className="text-sm"><strong>{jumlahKabupaten} Kabupaten/Kota</strong></p>
-                    <p className="text-sm"><strong>{jumlahKecamatan} Kecamatan</strong></p>
+                    <p className="text-sm"><strong>{jumlahProvinsi} Province</strong></p>
+                    <p className="text-sm"><strong>{jumlahKabupaten} Distric/City</strong></p>
+                    <p className="text-sm"><strong>{jumlahKecamatan} Sub district</strong></p>
                 </div>
             </div>
         </div>

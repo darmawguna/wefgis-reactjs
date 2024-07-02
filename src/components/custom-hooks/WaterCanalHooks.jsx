@@ -12,12 +12,11 @@ const useWaterCanalLayerInitialization = () => {
     useEffect(() => {
         const initializeWaterCanalLayer = () => {
             if (waterCanal && waterCanal.length > 0 && !waterCanalLayer) {
-                console.log('data water canal:', waterCanal);
                 const markers = L.layerGroup(
                     waterCanal.map(canal => {
                         const customIcon = L.icon({
                             iconUrl: WaterCanalMarker,
-                            iconSize: [32, 32], // Sesuaikan dengan ukuran gambar marker Anda
+                            iconSize: [36, 36], // Sesuaikan dengan ukuran gambar marker Anda
                             popupAnchor: [0, -10] // Sesuaikan posisi popup jika diperlukan
                         });
                         const marker = L.marker([parseFloat(canal.latitude), parseFloat(canal.longitude)], { icon: customIcon })
@@ -38,7 +37,7 @@ const useWaterCanalLayerInitialization = () => {
                 }
 
                 setWaterCanalLayer(markers);
-                addLayer(markers); // Add to global state layers
+                addLayer("watercanal", markers); // Add to global state layers
             }
         };
 

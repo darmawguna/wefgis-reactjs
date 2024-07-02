@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { baseMaps } from "../utils/basemap";
+import L from "leaflet";
 
 export const useSidebarStore = create((set) => ({
   isOpen: false,
@@ -19,10 +20,36 @@ export const useSidebarStore = create((set) => ({
 }));
 
 export const useMapStore = create((set) => ({
-  layers: [],
-  addLayer: (layer) => set((state) => ({ layers: [...state.layers, layer] })),
-  removeLayer: (layer) => set((state) => ({ layers: state.layers.filter((l) => l !== layer) })),
+  // state untuk menyimpan layer yang ada
+  layers: [
+    // Contoh inisialisasi awal layer
+    {
+      name: "Markers",
+      layer: L.layerGroup([L.marker([-8.517260599107024, 115.40790383695385]), L.marker([-8.493741092156219, 115.44753893468388])]),
+    },
+  ],
+  addLayer: (name, layer) =>
+    set((state) => ({
+      layers: [...state.layers, { name, layer }],
+    })),
+  removeLayer: (name) =>
+    set((state) => ({
+      layers: state.layers.filter((l) => l.name !== name),
+    })),
+  // State untuk menyimpan active layer
+  activeLayers: [],
+  setActiveLayers: (layers) => set({ activeLayers: layers }),
+  addActiveLayer: (layer) =>
+    set((state) => ({
+      activeLayers: [...state.activeLayers, layer],
+    })),
+  removeActiveLayer: (layerToRemove) =>
+    set((state) => ({
+      activeLayers: state.activeLayers.filter((layer) => layer !== layerToRemove),
+    })),
   resetLayers: () => set({ layers: [] }),
+  // State untuk menyimpan basemaps
+  basemaps: baseMaps,
   activeBasemap: baseMaps[0],
   setActiveBasemap: (basemap) => set({ activeBasemap: basemap }),
   map: null,

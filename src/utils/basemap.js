@@ -1,11 +1,4 @@
 import L from "leaflet";
-export const overlayMaps = [
-  {
-    name: "Markers",
-    layer: L.layerGroup([L.marker([51.5, -0.09]), L.marker([51.51, -0.1])]),
-  },
-  // Tambahkan overlay maps lainnya di sini
-];
 
 export const baseMaps = [
   {

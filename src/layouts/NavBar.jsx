@@ -26,9 +26,14 @@ export default function Navbar() {
                   Data Specs
                 </a>
               </li>
-              <li className="mr-4">
+              <li className="mr-32">
                 <a className="font-semibold" href="#user-guide">
                   User Guide
+                </a>
+              </li>
+              <li className="mr-4">
+                <a className="font-semibold" href="/login">
+                  Login
                 </a>
               </li>
             </ul>
