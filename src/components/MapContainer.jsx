@@ -52,22 +52,7 @@ const MapInstanceProvider = () => {
     return null;
 };
 
-const fetchWaterCanalData = async () => {
-    try {
-        const response = await fetch('http://127.0.0.1:8000/api/water', {
-            // headers: {
-            //     'Authorization': `Bearer ${ token }`,
-            //     'Content-Type': 'application/json'
-            // }
-        });
-        const result = await response.json();
-        if (result.success) {
-            useMapStore.getState().setWaterCanal(result.data);
-        }
-    } catch (error) {
-        console.error('Error fetching water canal data:', error);
-    }
-};
+
 
 const createPredictionPopupHTML = ({ DEM, TPI, NDVI, NDWI, decision }) => {
     return `
@@ -95,18 +80,7 @@ const createPredictionPopupHTML = ({ DEM, TPI, NDVI, NDWI, decision }) => {
 };
 
 
-const fetchHistoryData = async () => {
-    try {
-        const response = await fetch('/histori');
-        const result = await response.json();
-        if (result.success) {
-            useMapStore.getState().setHistoryData(result);
-            console.log(result)
-        }
-    } catch (error) {
-        console.error('Error fetching history data:', error);
-    }
-};
+
 
 
 const MapComponent = () => {
@@ -117,10 +91,7 @@ const MapComponent = () => {
     const markerPredictionLayer = useMapStore((state) => state.markerPredictionLayer);
     const setMarkerPredictionLayer = useMapStore((state) => state.setMarkerPredictionLayer);
     const deleteMarkerPredictionLayer = useMapStore((state) => state.deleteMarkerPredictionLayer);
-    useEffect(() => {
-        fetchWaterCanalData();
-        fetchHistoryData();
-    }, []);
+
     useWaterCanalLayerInitialization();
 
     useEffect(() => {
