@@ -10,6 +10,7 @@ const SidebarController = () => {
     const setOpen = useSidebarStore((state) => state.setOpen);
     const map = useMapStore((state) => state.map);
     const activeLayers = useMapStore((state) => state.activeLayers);
+    const markerPredictionLayer = useMapStore((state) => state.markerPredictionLayer);
 
     const handleClose = () => {
         setOpen(false);
@@ -22,6 +23,10 @@ const SidebarController = () => {
                     layer.layer.addTo(map);
                 }
             });
+
+            if (markerPredictionLayer && !map.hasLayer(markerPredictionLayer)) {
+                markerPredictionLayer.addTo(map);
+            }
         }
     }, [map, content, activeLayers]);
 

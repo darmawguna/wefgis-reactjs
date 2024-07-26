@@ -7,6 +7,7 @@ const BasemapController = () => {
     const map = useMapStore((state) => state.map);
     const activeLayers = useMapStore((state) => state.activeLayers);
     const basemaps = useMapStore((state) => state.basemaps);
+    const markerPredictionLayer = useMapStore((state) => state.markerPredictionLayer);
 
     useEffect(() => {
         if (map && activeBasemap && activeBasemap.layer) {
@@ -17,6 +18,9 @@ const BasemapController = () => {
                     layer.layer.addTo(map);
                 }
             });
+            if (markerPredictionLayer && !map.hasLayer(markerPredictionLayer)) {
+                markerPredictionLayer.addTo(map);
+            }
 
             return () => {
                 map.eachLayer(layer => {

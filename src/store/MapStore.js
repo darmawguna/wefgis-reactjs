@@ -61,4 +61,14 @@ export const useMapStore = create((set) => ({
   // state untuk menyimpan layergroup dari watercanal
   waterCanalLayer: null,
   setWaterCanalLayer: (layer) => set({ waterCanalLayer: layer }),
+
+  // state untuk menyimpan layer marker prediction floodmapping
+  markerPredictionLayer: null,
+  setMarkerPredictionLayer: (layer) => set({ markerPredictionLayer: layer }),
+  deleteMarkerPredictionLayer: () => set({ markerPredictionLayer: null }),
+
+  historyData: [], // Add this line
+  setHistoryData: (data) => set({ historyData: data }), // Add this line
 }));
+
+

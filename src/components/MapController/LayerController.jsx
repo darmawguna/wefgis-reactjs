@@ -7,6 +7,7 @@ const LayerController = () => {
     const activeLayers = useMapStore((state) => state.activeLayers);
     const addActiveLayer = useMapStore((state) => state.addActiveLayer);
     const removeActiveLayer = useMapStore((state) => state.removeActiveLayer);
+    const markerPredictionLayer = useMapStore((state) => state.markerPredictionLayer);
 
     useEffect(() => {
         if (map) {
@@ -15,7 +16,11 @@ const LayerController = () => {
                     layer.layer.addTo(map);
                 }
             });
-            console.log(activeLayers.length);
+
+            if (markerPredictionLayer && !map.hasLayer(markerPredictionLayer)) {
+                markerPredictionLayer.addTo(map);
+            }
+
         }
     }, [map, activeLayers]);
 
