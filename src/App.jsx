@@ -4,7 +4,8 @@ import "./App.css";
 import LandingPage from "./pages/landingPage";
 import MapBar from "./pages/map";
 
-import PageTesting from './pages/pageTesting';
+
+import DashboardPage from './pages/dashboardPage';
 
 
 function App() {
@@ -16,10 +17,8 @@ function App() {
           <Routes>
             <Route path="/" element={ <LandingPage/>} />
             <Route path="/map" element={<MapBar />} />
-            <Route path="/testing" element={<PageTesting />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             {/* <Route path="/login" element={<LoginPage />} /> */}
-            
-            
           </Routes>
         </div>
       </Router>
