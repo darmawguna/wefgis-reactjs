@@ -4,7 +4,7 @@ const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
             <button
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="py-2 px-4  border rounded-lg bg-gray-200 hover:bg-gray-300 transition duration-200 disabled:opacity-50"
+                className="py-2 px-3 border rounded-lg bg-gray-200 hover:bg-gray-300 transition duration-200 disabled:opacity-50"
             >
                 &lt;
             </button>
@@ -15,7 +15,7 @@ const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
                         <button
                             key={pageNumber}
                             onClick={() => onPageChange(pageNumber)}
-                            className={`px-4 py-2 border rounded-lg transition duration-200 ${ currentPage === pageNumber
+                            className={`px-3 py-2 border rounded-lg transition duration-200 ${ currentPage === pageNumber
                                 ? 'bg-blue-500 text-white border-blue-500'
                                 : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
                                 }`}
@@ -36,7 +36,7 @@ const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
             <button
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="py-2 px-4 border rounded-lg bg-gray-200 hover:bg-gray-300 transition duration-200 disabled:opacity-50"
+                className="py-2 px-3 border rounded-lg bg-gray-200 hover:bg-gray-300 transition duration-200 disabled:opacity-50"
             >
                 &gt;
             </button>

@@ -26,7 +26,7 @@ const DashboardSidebarComponent = () => {
 
     return (
         <>
-            <div className=" w-[10vw] flex flex-col gap-6 bg-[#103A5E]">
+            <div className=" w-[10vw] h-full flex flex-col gap-6 bg-[#103A5E]">
                 <h3 className="text-white text-xl mt-4 ml-8">Dashboard</h3>
                 <div className="flex flex-col ">
                     {buttons.map((button) => (

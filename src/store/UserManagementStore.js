@@ -2,7 +2,19 @@
 import { create } from "zustand";
 
 const UserManagementStore = create((set) => ({
-  users: [],
+  users: [
+    {
+      user_id: 2,
+      name: "Arya Wiguna",
+      email: "darmawiguna@gmail.com",
+      phone_number: "086557655",
+      role: "user",
+      location: "jalan sahadewa",
+      latitude: 13.6541,
+      longitude: 100.495,
+    },
+  ],
+  setUser: (user) => set({ user }),
   totalItems: 0,
   currentPage: 1,
   totalPages: 1,
