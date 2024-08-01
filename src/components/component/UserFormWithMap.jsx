@@ -37,7 +37,6 @@ const UserFormWithMap = ({ onSubmit, }) => {
             getCoordinates(location);
         }
     };
-
     const addUser = async (userData) => {
         setLoading(true);
         try {
