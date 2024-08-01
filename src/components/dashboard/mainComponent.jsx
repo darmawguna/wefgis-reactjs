@@ -1,13 +1,13 @@
 import { useDashboardStore } from "../../store/DashboardStore"
-import FormComponent from "../component/FormComponent";
+
 import UserManagementComponent from "./UserManagementComponent";
 
 
 const MainDashboardComponent = () => {
     const content = useDashboardStore((state) => state.content);
     return (
-        <div className="h-auto max-h-full overflow-hidden">
-            <div className="flex-1 px-4 h-auto overflow-hidden">
+        <div className="h-auto max-h-full ">
+            <div className="flex-1 px-4 h-auto ">
                 {content === 'User Management' && (
                     <div>
                         <UserManagementComponent />
@@ -15,7 +15,7 @@ const MainDashboardComponent = () => {
                 )}
                 {content === 'Sensor Management' && (
                     <div className="w-full">
-                        <FormComponent />
+                        <p> Sensor Management</p>
                     </div>
                 )}
             </div>

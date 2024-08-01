@@ -1,17 +1,16 @@
-// import NavbarDashboardComponent from "../components/dashboard/navbarDashboardComponent";
-
 import MainDashboardComponent from "../components/dashboard/mainComponent";
 import NavbarDashboardComponent from "../components/dashboard/navbarDashboardComponent";
 import DashboardSidebarComponent from "../components/dashboard/sidebarComponent";
-
 
 const DashboardLayout = () => {
     return (
         <div className="flex flex-row h-screen w-screen bg-[#F1F1F1]">
             <DashboardSidebarComponent />
-            <div className="w-[90vw]  flex flex-col">
+            <div className="flex flex-col w-[90vw]">
                 <NavbarDashboardComponent />
-                <MainDashboardComponent />
+                <div className="flex-1 overflow-y-auto">
+                    <MainDashboardComponent />
+                </div>
             </div>
         </div>
     );

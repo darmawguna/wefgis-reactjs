@@ -1,30 +1,17 @@
-// UserManagementStore.js
 import { create } from "zustand";
 
 const UserManagementStore = create((set) => ({
-  users: [
-    {
-      user_id: 2,
-      name: "Arya Wiguna",
-      email: "darmawiguna@gmail.com",
-      phone_number: "086557655",
-      role: "user",
-      location: "jalan sahadewa",
-      latitude: 13.6541,
-      longitude: 100.495,
-    },
-  ],
+  users: [],
   setUser: (user) => set({ user }),
   totalItems: 0,
   currentPage: 1,
   totalPages: 1,
-  fetchUsers: async () => {
+  fetchUsers: async (page = 1) => {
     try {
-      const response = await fetch("http://localhost:3000/users"); // Ganti dengan URL API Anda
+      const response = await fetch(`http://localhost:3000/users?page=${page}`);
       const data = await response.json();
 
-      const usersData = data.data || {}; // Pastikan data.data ada
-      console.log(usersData.currentPage);
+      const usersData = data.data || {};
 
       set({
         users: usersData.users || [],
@@ -41,7 +28,7 @@ const UserManagementStore = create((set) => ({
       if (page >= 1 && page <= state.totalPages) {
         return { currentPage: page };
       }
-      return state; // Kembalikan state jika page tidak valid
+      return state;
     }),
 }));
 
