@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import SearchComponent from './SearchComponent';
 
-const UserFormWithMap = ({ onSubmit, initialValues = {} }) => {
+const UserFormWithMap = ({ onSubmit, initialValues = { name: '', email: '', phone_number: '', location: '', latitude: null, longitude: null } }) => {
     const [name, setName] = useState(initialValues.name || '');
     const [email, setEmail] = useState(initialValues.email || '');
     const [phone_number, setPhoneNumber] = useState(initialValues.phone_number || '');
@@ -234,7 +234,7 @@ const UserFormWithMap = ({ onSubmit, initialValues = {} }) => {
                     disabled={loading}
                     className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg"
                 >
-                    {loading ? 'Adding...' : initialValues ? 'Edit User' : 'Add User'}
+                    {loading ? 'Adding...' : initialValues.user_id ? 'Edit User' : 'Add User'}
                 </button>
             </div>
         </form>
