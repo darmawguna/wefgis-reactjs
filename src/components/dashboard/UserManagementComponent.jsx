@@ -5,6 +5,7 @@ import ComponentTable from '../component/Table';
 // import AddUserForm from '../component/UserForm'; // Import komponen form
 import { useEffect, useState } from 'react';
 import UserFormWithMap from '../component/UserFormWithMap';
+// import Swal from 'sweetalert2';
 
 const UserManagement = () => {
     const headers = ["name", "email", "phone_number", "location"];
@@ -48,6 +49,7 @@ const UserManagement = () => {
 
     const handleDeleteUserClick = async (userId) => {
         try {
+
             const response = await fetch(`http://localhost:3000/users/${ userId }`, {
                 method: 'DELETE',
             });
@@ -55,6 +57,8 @@ const UserManagement = () => {
             if (!response.ok) {
                 throw new Error('Failed to delete user.');
             }
+
+
 
             fetchUsers(currentPage); // Refresh data pengguna setelah delete
         } catch (error) {

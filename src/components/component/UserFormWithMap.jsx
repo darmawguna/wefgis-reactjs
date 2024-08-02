@@ -3,13 +3,13 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import SearchComponent from './SearchComponent';
 
-const UserFormWithMap = ({ onSubmit, }) => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone_number, setPhoneNumber] = useState(''); // Initialize as empty string
-    const [location, setLocation] = useState('');
-    const [latitude, setLatitude] = useState('');
-    const [longitude, setLongitude] = useState('');
+const UserFormWithMap = ({ onSubmit, initialValues = {} }) => {
+    const [name, setName] = useState(initialValues.name || '');
+    const [email, setEmail] = useState(initialValues.email || '');
+    const [phone_number, setPhoneNumber] = useState(initialValues.phone_number || '');
+    const [location, setLocation] = useState(initialValues.location || '');
+    const [latitude, setLatitude] = useState(initialValues.latitude || null);
+    const [longitude, setLongitude] = useState(initialValues.longitude || null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -40,8 +40,8 @@ const UserFormWithMap = ({ onSubmit, }) => {
     const addUser = async (userData) => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:3000/users', {
-                method: 'POST',
+            const response = await fetch(`http://localhost:3000/users${ initialValues.user_id ? `/${ initialValues.user_id }` : '' }`, {
+                method: initialValues.user_id ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -234,7 +234,7 @@ const UserFormWithMap = ({ onSubmit, }) => {
                     disabled={loading}
                     className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg"
                 >
-                    {loading ? 'Adding...' : 'Add User'}
+                    {loading ? 'Adding...' : initialValues ? 'Edit User' : 'Add User'}
                 </button>
             </div>
         </form>
