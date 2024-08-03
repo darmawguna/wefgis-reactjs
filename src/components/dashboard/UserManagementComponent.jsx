@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import UserFormWithMap from '../component/UserFormWithMap';
 import Swal from 'sweetalert2';
 
-const UserManagement = () => {
+const UserManagementComponent = () => {
     const headers = ["name", "email", "phone_number", "location"];
     const { users, totalPages, currentPage, fetchUsers, setCurrentPage } = UserManagementStore();
     const [isAddingUser, setIsAddingUser] = useState(false);
@@ -151,4 +151,4 @@ const UserManagement = () => {
     );
 }
 
-export default UserManagement;
+export default UserManagementComponent;

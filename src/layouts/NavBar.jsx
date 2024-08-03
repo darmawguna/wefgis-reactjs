@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 export default function Navbar() {
   return (
     <>
@@ -32,9 +33,9 @@ export default function Navbar() {
                 </a>
               </li>
               <li className="mr-4">
-                <a className="font-semibold" href="/login">
+                <Link className="font-semibold" to="/dashboard" >
                   Login
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
