@@ -1,4 +1,5 @@
 import { useDashboardStore } from "../../store/DashboardStore"
+import SensorManagementComponent from "./SensoManagementComponent";
 
 import UserManagementComponent from "./UserManagementComponent";
 
@@ -14,8 +15,8 @@ const MainDashboardComponent = () => {
                     </div>
                 )}
                 {content === 'Sensor Management' && (
-                    <div className="w-full">
-                        <p> Sensor Management</p>
+                    <div >
+                        <SensorManagementComponent />
                     </div>
                 )}
             </div>

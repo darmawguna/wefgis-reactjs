@@ -2,12 +2,15 @@ import { useState } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import SearchComponent from './SearchComponent';
+import DatePicker from 'react-datepicker'; // Import DatePicker
+import 'react-datepicker/dist/react-datepicker.css'; // Import CSS for DatePicker
 
-const UserFormWithMap = ({ onSubmit, initialValues = { name: '', email: '', phone_number: '', location: '', latitude: null, longitude: null } }) => {
-    const [name, setName] = useState(initialValues.name || '');
-    const [email, setEmail] = useState(initialValues.email || '');
-    const [phone_number, setPhoneNumber] = useState(initialValues.phone_number || '');
+const SensorForm = ({ onSubmit, initialValues = { description: '', installation_date: '', status: '', location: '', latitude: null, longitude: null } }) => {
     const [location, setLocation] = useState(initialValues.location || '');
+    const [description, setDescription] = useState(initialValues.description || '');
+    const [status, setStatus] = useState(initialValues.status || '');
+    const [installation_date, setInstalationDate] = useState(initialValues.installation_date ? new Date(initialValues.installation_date) : null); // Manage date state
+
     const [latitude, setLatitude] = useState(initialValues.latitude || null);
     const [longitude, setLongitude] = useState(initialValues.longitude || null);
     const [error, setError] = useState('');
@@ -40,7 +43,7 @@ const UserFormWithMap = ({ onSubmit, initialValues = { name: '', email: '', phon
     const addUser = async (userData) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:3000/users${ initialValues.id ? `/${ initialValues.id }` : '' }`, {
+            const response = await fetch(`http://localhost:3000/sensors${ initialValues.id ? `/${ initialValues.id }` : '' }`, {
                 method: initialValues.id ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,13 +58,14 @@ const UserFormWithMap = ({ onSubmit, initialValues = { name: '', email: '', phon
             }
 
             // Reset form after successful addition
-            setName('');
-            setEmail('');
-            setPhoneNumber('');
+            // Reset form after successful addition
+            setDescription('');
             setLocation('');
             setLatitude(null);
             setLongitude(null);
+            setInstalationDate(null); // Reset date
             setError('');
+
 
             onSubmit(); // Call onSubmit 
         } catch (error) {
@@ -73,30 +77,22 @@ const UserFormWithMap = ({ onSubmit, initialValues = { name: '', email: '', phon
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Validate Email
-        if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-            setError('Please enter a valid email address.');
-            return;
-        }
-        // Validate Phone Number
-        if (!phone_number || !phone_number.match(/^[0-9]+$/)) {
-            setError('Please enter a valid phone number.');
-            return;
-        }
+
         // Validate all inputs
-        if (!name || !email || !phone_number || !location || latitude === null || longitude === null) {
+        // Validate all inputs
+        if (!description || !status || !location || latitude === null || longitude === null || !installation_date) {
             setError('Please fill out all fields.');
             return;
         }
         setError('');
 
         const userData = {
-            name,
-            email,
-            phone_number,
+            description,
+            status,
             location,
             latitude,
             longitude,
+            installation_date: installation_date.toISOString().split('T')[0],  // Format date for submission
         };
         addUser(userData);
     };
@@ -129,55 +125,59 @@ const UserFormWithMap = ({ onSubmit, initialValues = { name: '', email: '', phon
 
     return (
         <form onSubmit={handleSubmit} className="p-4 bg-white shadow-md rounded-lg">
-            <h2 className="text-xl font-semibold mb-4">User Information</h2>
+            <h2 className="text-xl font-semibold mb-4">Sensor Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                    <label className="block text-sm font-medium mb-2">Name</label>
+                    <label className="block text-sm font-medium mb-2">Location</label>
                     <input
                         type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={location}
+                        onBlur={handleLocationBlur}
+                        onChange={(e) => setLocation(e.target.value)}
+                        required
+                        className="w-full border border-gray-300 rounded-lg p-2"
+                    />
+                    {error && error.includes("Location not found") && (
+                        <p className="text-red-500 text-sm mt-1">{error}</p>
+                    )}
+                </div>
+                <div>
+                    <label className="block text-sm font-medium mb-2">Description</label>
+                    <input
+                        type="text"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
                         required
                         className="w-full border border-gray-300 rounded-lg p-2"
                     />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium mb-2">Email</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                    <label className="block text-sm font-medium mb-2">Status</label>
+                    <select
+                        value={status} // Ensure controlled
+                        onChange={(e) => setStatus(e.target.value)}
                         required
                         className="w-full border border-gray-300 rounded-lg p-2"
-                    />
+                    >
+                        <option value="" disabled>Select status</option>
+                        <option value="active">Active</option>
+                        <option value="deactive">Deactive</option>
+                    </select>
                 </div>
                 <div>
-                    <label className="block text-sm font-medium mb-2">Phone Number</label>
-                    <input
-                        type="text"
-                        value={phone_number} // Ensure controlled
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        required
+                    <label className="block text-sm font-medium mb-2">Installation Date</label>
+                    <DatePicker
+                        selected={installation_date}
+                        onChange={(date) => setInstalationDate(date)}
+                        dateFormat="yyyy/MM/dd"
                         className="w-full border border-gray-300 rounded-lg p-2"
+                        placeholderText="Select date"
+                        required
                     />
                 </div>
             </div>
 
             <h2 className="text-xl font-semibold mb-4 mt-6">Location</h2>
-            <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Location</label>
-                <input
-                    type="text"
-                    value={location}
-                    onBlur={handleLocationBlur}
-                    onChange={(e) => setLocation(e.target.value)}
-                    required
-                    className="w-full border border-gray-300 rounded-lg p-2"
-                />
-                {error && error.includes("Location not found") && (
-                    <p className="text-red-500 text-sm mt-1">{error}</p>
-                )}
-            </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
                     <label className="block text-sm font-medium mb-2">Latitude</label>
@@ -234,11 +234,11 @@ const UserFormWithMap = ({ onSubmit, initialValues = { name: '', email: '', phon
                     disabled={loading}
                     className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg"
                 >
-                    {loading ? 'Adding...' : initialValues.user_id ? 'Edit User' : 'Add User'}
+                    {loading ? 'Adding...' : initialValues.id ? 'Edit Sensor' : 'Add Sensor'}
                 </button>
             </div>
         </form>
     );
 };
 
-export default UserFormWithMap;
+export default SensorForm;

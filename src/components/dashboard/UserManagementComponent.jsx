@@ -2,7 +2,6 @@ import SearchComponent from '../component/SearchComponent';
 import PaginationComponent from './PaginationComponent';
 import UserManagementStore from '../../store/UserManagementStore';
 import ComponentTable from '../component/Table';
-// import AddUserForm from '../component/UserForm'; // Import komponen form
 import { useEffect, useState } from 'react';
 import UserFormWithMap from '../component/UserFormWithMap';
 import Swal from 'sweetalert2';
@@ -10,7 +9,7 @@ import Swal from 'sweetalert2';
 const UserManagement = () => {
     const headers = ["name", "email", "phone_number", "location"];
     const { users, totalPages, currentPage, fetchUsers, setCurrentPage } = UserManagementStore();
-    const [isAddingUser, setIsAddingUser] = useState(false); // State untuk kontrol tampilan form
+    const [isAddingUser, setIsAddingUser] = useState(false);
     const [isEditingUser, setIsEditingUser] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
@@ -29,14 +28,12 @@ const UserManagement = () => {
         setIsAddingUser(true); // Set state untuk menampilkan form
         setIsEditingUser(false);
         setSelectedUser({});
-        // console.log(isAddingUser);
     };
 
     const handleEditUserClick = (user) => {
         setIsAddingUser(true);
         setIsEditingUser(true);
         setSelectedUser(user);
-        console.log(user);
     };
 
 
@@ -103,21 +100,22 @@ const UserManagement = () => {
                     {isAddingUser || isEditingUser ?
                         (<div className='font-bold text-lg'>{isEditingUser ? 'Edit User' : 'Add User'}</div>)
                         :
-                        (<div className='font-bold text-lg'>All Users</div>)}
+                        (<div className='font-bold text-lg'>All Users</div>)
+                    }
 
                     {isAddingUser || isEditingUser ? (
                         ""
                     ) : (
                         <div className='flex flex-row gap-6'>
                             <SearchComponent />
-                                <div>
-                                    <button
-                                        onClick={handleAddUserClick}
-                                        className="flex items-center bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition duration-200"
-                                    >
-                                        Add User
-                                    </button>
-                                </div>
+                            <div>
+                                <button
+                                    onClick={handleAddUserClick}
+                                    className="flex items-center bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow hover:bg-blue-700 transition duration-200"
+                                >
+                                    Add User
+                                </button>
+                            </div>
                         </div>
                     )}
 
@@ -127,14 +125,14 @@ const UserManagement = () => {
                         {isAddingUser || isEditingUser ? (
                             <UserFormWithMap onSubmit={handleFormSubmit} initialValues={selectedUser} />
                         ) : (
-                                <ComponentTable
-                                    headers={headers}
-                                    data={users}
-                                    onEdit={handleEditUserClick}
-                                    onDelete={handleDeleteUserClick}
-                                    currentPage={currentPage}
-                                    itemsPerPage={10}
-                                />
+                            <ComponentTable
+                                headers={headers}
+                                data={users}
+                                onEdit={handleEditUserClick}
+                                onDelete={handleDeleteUserClick}
+                                currentPage={currentPage}
+                                itemsPerPage={10}
+                            />
                         )}
                     </div>
                 </div>

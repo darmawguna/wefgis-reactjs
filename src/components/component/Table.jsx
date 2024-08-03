@@ -33,7 +33,8 @@ const ComponentTable = ({ headers, data, onEdit, onDelete, currentPage, itemsPer
                                     </div>
                                     <form onSubmit={(e) => {
                                         e.preventDefault();
-                                        onDelete(row.user_id);
+                                        console.log(row.id)
+                                        onDelete(row.id);
                                     }}>
                                         <div>
                                             <button type="submit">
