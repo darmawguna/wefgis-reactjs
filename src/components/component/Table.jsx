@@ -1,4 +1,5 @@
 const ComponentTable = ({ headers, data, onEdit, onDelete, currentPage, itemsPerPage }) => {
+
     return (
         <div className="overflow-x-auto p-4">
             <table className="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
@@ -27,13 +28,17 @@ const ComponentTable = ({ headers, data, onEdit, onDelete, currentPage, itemsPer
                                 ))}
                                 <td className="p-2 flex items-center justify-center gap-2">
                                     <div>
+                                        {/* <button onClick={() => onDetail(row)}>
+                                            Detail
+                                        </button> */}
+                                    </div>
+                                    <div>
                                         <button onClick={() => onEdit(row)}>
                                             Edit
                                         </button>
                                     </div>
                                     <form onSubmit={(e) => {
                                         e.preventDefault();
-                                        console.log(row.id)
                                         onDelete(row.id);
                                     }}>
                                         <div>

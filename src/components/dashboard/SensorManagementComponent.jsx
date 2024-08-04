@@ -6,30 +6,35 @@ import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import PaginationComponent from "./PaginationComponent";
 import SensorForm from "../component/sensorForm";
+// import SensorDetailComponent from "./SensorDetailComponent";
 
 const SensorManagementComponent = () => {
-    const [isAddingSensor, setIsAddingSensor] = useState(false);
-    const [isEditingSensor, setIsEditingSensor] = useState(false);
     const [selectedSensor, setSelectedSensor] = useState(null);
-    const { sensors, totalPages, currentPage, fetchSensors, setCurrentPage } = SensorManagementStore();
+    const { sensors, totalPages, currentPage, fetchSensors, setCurrentPage, isAddingSensor, isEditingSensor, setIsAddingSensor, setIsEditingSensor, isDetailSensor } = SensorManagementStore();
     const headers = ['location', 'description', 'status'];
 
     useEffect(() => {
         fetchSensors(currentPage); // Fetch data for the current page
     }, [fetchSensors, currentPage]);
-
     const handleAddSensorClick = () => {
-        setIsAddingSensor(true); // Set state untuk menampilkan form
-        setIsEditingSensor(false);
         setSelectedSensor({});
     };
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
-        fetchSensors(page); // Fetch data for the new page
+        fetchSensors(page); 
     };
 
+    // const handleDetailPage = (sensor) => {
+    //     console.log(sensor)
+    //     setIsDetailSensor(true);
+    //     setSelectedSensor(sensor);
+    //     // setIsAddingSensor(false);
+    //     // setIsEditingSensor(false);
+    // }
+
     const handleEditSensorClick = (sensor) => {
+        console.log(isDetailSensor);
         setIsAddingSensor(false);
         setIsEditingSensor(true);
         setSelectedSensor(sensor);
@@ -63,7 +68,6 @@ const SensorManagementComponent = () => {
                 Swal.fire('Error!', 'Failed to delete sensor.', 'error');
             }
         }
-
     };
 
     const handleFormSubmit = () => {
@@ -119,8 +123,11 @@ const SensorManagementComponent = () => {
                 </div>
                 <div className="flex-1 overflow-y-auto">
                     <div className="min-w-full">
-                        {isAddingSensor || isEditingSensor ? (
+                        {(isAddingSensor || isEditingSensor) ? (
                             <SensorForm onSubmit={handleFormSubmit} initialValues={selectedSensor} />
+                        ) : (isDetailSensor ? (
+                            // Tampilkan DetailPage ketika isDetailSensor true
+                            "DetailPage"
                         ) : (
                             <ComponentTable
                                 headers={headers}
@@ -130,7 +137,7 @@ const SensorManagementComponent = () => {
                                 currentPage={currentPage}
                                 itemsPerPage={10}
                             />
-                        )}
+                        ))}
                     </div>
                 </div>
                 {!isAddingSensor && !isEditingSensor && (
