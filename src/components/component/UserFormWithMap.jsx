@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import SearchComponent from './SearchComponent';
+import UserManagementStore from '../../store/UserManagementStore';
 
 const UserFormWithMap = ({ onSubmit, initialValues = { name: '', email: '', phone_number: '', location: '', latitude: null, longitude: null } }) => {
     const [name, setName] = useState(initialValues.name || '');
@@ -12,6 +13,7 @@ const UserFormWithMap = ({ onSubmit, initialValues = { name: '', email: '', phon
     const [longitude, setLongitude] = useState(initialValues.longitude || null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const { setIsAddingUser, setIsEditingUser } = UserManagementStore();
 
     const getCoordinates = async (location) => {
         const url = `https://nominatim.openstreetmap.org/search?format=json&q=${ encodeURIComponent(location) }`;
@@ -37,6 +39,11 @@ const UserFormWithMap = ({ onSubmit, initialValues = { name: '', email: '', phon
             getCoordinates(location);
         }
     };
+
+    const onCancel = () => {
+        setIsAddingUser(false);
+        setIsEditingUser(false);
+    }
     const addUser = async (userData) => {
         setLoading(true);
         try {
@@ -224,7 +231,8 @@ const UserFormWithMap = ({ onSubmit, initialValues = { name: '', email: '', phon
             <div className="flex justify-between mt-4">
                 <button
                     type="button"
-                    onClick={() => onSubmit()}
+                    onClick={() => onCancel()}
+
                     className="text-gray-500 hover:text-gray-700"
                 >
                     Cancel

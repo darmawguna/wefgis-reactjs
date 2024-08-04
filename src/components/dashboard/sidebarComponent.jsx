@@ -1,47 +1,47 @@
 import { useState } from 'react';
-import { useDashboardStore } from '../../store/DashboardStore';
-
+import { Link } from 'react-router-dom';
 
 
 const DashboardSidebarComponent = () => {
-    const [activeButton, setActiveButton] = useState('User Management');
-    const setContent = useDashboardStore((state) => state.setContent);
+    const [activeButton, setActiveButton] = useState('Dashboard');
 
     const buttons = [
         {
+            label: 'Dashboard',
+            route: '', // Tambahkan route
+
+        },
+        {
             label: 'User Management',
-            onClick: () => {
-                setContent('User Management');
-                console.log('User Management clicked');
-            }
+            route: 'user-management', // Tambahkan route
+
         },
         {
             label: 'Sensor Management',
-            onClick: () => {
-                setContent('Sensor Management');
-                console.log('Sensor Management clicked');
-            }
+            route: 'sensor-management', // Tambahkan route
+
         }
     ];
 
     return (
         <>
             <div className=" w-[10vw] h-full flex flex-col gap-6 bg-[#103A5E]">
-                <h3 className="text-white text-xl mt-4 ml-8">Dashboard</h3>
+                <h3 className="text-white text-xl mt-4 ml-8">
+
+                </h3>
                 <div className="flex flex-col ">
                     {buttons.map((button) => (
                         <div className="text-white " key={button.label}>
-                            <button
+                            <Link
+                                to={`/dashboard/${ button.route }`}
                                 onClick={() => {
                                     setActiveButton(button.label);
-                                    button.onClick()
+                                    // button.onClick();
                                 }}
-                                className=
-
-                                {`${ activeButton === button.label ? 'bg-blue-500 text-white' : 'bg-transparent text-white' } p-2 rounded w-full`}
+                                className={`${ activeButton === button.label ? 'bg-blue-500 text-white' : 'bg-transparent text-white' } p-2 rounded w-full block text-left`}
                             >
                                 {button.label}
-                            </button>
+                            </Link>
                         </div>
                     ))}
                 </div>

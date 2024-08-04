@@ -4,17 +4,18 @@ import 'leaflet/dist/leaflet.css';
 import SearchComponent from './SearchComponent';
 import DatePicker from 'react-datepicker'; // Import DatePicker
 import 'react-datepicker/dist/react-datepicker.css'; // Import CSS for DatePicker
+import SensorManagementStore from '../../store/SensorManagementStore';
 
 const SensorForm = ({ onSubmit, initialValues = { description: '', installation_date: '', status: '', location: '', latitude: null, longitude: null } }) => {
     const [location, setLocation] = useState(initialValues.location || '');
     const [description, setDescription] = useState(initialValues.description || '');
     const [status, setStatus] = useState(initialValues.status || '');
     const [installation_date, setInstalationDate] = useState(initialValues.installation_date ? new Date(initialValues.installation_date) : null); // Manage date state
-
     const [latitude, setLatitude] = useState(initialValues.latitude || null);
     const [longitude, setLongitude] = useState(initialValues.longitude || null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const { setIsAddingSensor, setIsEditingSensor, isAddingSensor } = SensorManagementStore();
 
     const getCoordinates = async (location) => {
         const url = `https://nominatim.openstreetmap.org/search?format=json&q=${ encodeURIComponent(location) }`;
@@ -107,6 +108,13 @@ const SensorForm = ({ onSubmit, initialValues = { description: '', installation_
         });
         return null;
     };
+
+    const onCancel = () => {
+        console.log(isAddingSensor);
+        setIsAddingSensor(false);
+        setIsEditingSensor(false);
+        console.log(isAddingSensor);
+    }
 
     const getAddress = async (lat, lng) => {
         const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${ lat }&lon=${ lng }`;
@@ -224,7 +232,7 @@ const SensorForm = ({ onSubmit, initialValues = { description: '', installation_
             <div className="flex justify-between mt-4">
                 <button
                     type="button"
-                    onClick={() => onSubmit()}
+                    onClick={() => onCancel()}
                     className="text-gray-500 hover:text-gray-700"
                 >
                     Cancel

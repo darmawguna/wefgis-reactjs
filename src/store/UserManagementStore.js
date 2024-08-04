@@ -6,6 +6,13 @@ const UserManagementStore = create((set) => ({
   totalItems: 0,
   currentPage: 1,
   totalPages: 1,
+  //  const [isAddingUser, setIsAddingUser] = useState(false);
+  // const [isEditingUser, setIsEditingUser] = useState(false);
+  isAddingUser: false,
+  setIsAddingUser: (isAddingUser) => set({ isAddingUser }),
+
+  isEditingUser: false,
+  setIsEditingUser: (isEditingUser) => set({ isEditingUser }),
   fetchUsers: async (page = 1) => {
     try {
       const response = await fetch(`http://localhost:3000/users?page=${page}`);

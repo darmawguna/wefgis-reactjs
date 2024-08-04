@@ -6,6 +6,12 @@ const SensorManagementStore = create((set) => ({
   totalItems: 0,
   currentPage: 1,
   totalPages: 1,
+  isAddingSensor: false,
+  setIsAddingSensor: (isAddingSensor) => set({ isAddingSensor }),
+  isEditingSensor: false,
+  setIsEditingSensor: (isEditingSensor) => set({ isEditingSensor }),
+  isDetailSensor: true,
+  setIsDetailSensor: (isDetailSensor) => set({ isDetailSensor }),
   fetchSensors: async (page = 1) => {
     try {
       const response = await fetch(`http://localhost:3000/sensors?page=${page}`);

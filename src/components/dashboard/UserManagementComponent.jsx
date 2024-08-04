@@ -8,9 +8,9 @@ import Swal from 'sweetalert2';
 
 const UserManagementComponent = () => {
     const headers = ["name", "email", "phone_number", "location"];
-    const { users, totalPages, currentPage, fetchUsers, setCurrentPage } = UserManagementStore();
-    const [isAddingUser, setIsAddingUser] = useState(false);
-    const [isEditingUser, setIsEditingUser] = useState(false);
+    const { users, totalPages, currentPage, fetchUsers, setCurrentPage, isAddingUser, setIsAddingUser, isEditingUser, setIsEditingUser } = UserManagementStore();
+    // const [isAddingUser, setIsAddingUser] = useState(false);
+    // const [isEditingUser, setIsEditingUser] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
 
@@ -145,7 +145,6 @@ const UserManagementComponent = () => {
                         />
                     </div>
                 )}
-
             </div>
         </div>
     );
