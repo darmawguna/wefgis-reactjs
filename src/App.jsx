@@ -10,6 +10,8 @@ import UserManagementComponent from './components/dashboard/UserManagementCompon
 import SensorManagementComponent from './components/dashboard/SensoManagementComponent';
 import DashboardComponent from './components/dashboard/DashboardComponent';
 
+import MoistureClient from './pages/pageTesting';
+
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
               <Route path="sensor-management" element={<SensorManagementComponent />} />
             </Route>
             {/* <Route path="/login" element={<LoginPage />} /> */}
+            <Route path="testing" element={<MoistureClient />} />
           </Routes>
         </div>
       </Router>

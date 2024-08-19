@@ -15,7 +15,7 @@ const UserManagementStore = create((set) => ({
   setIsEditingUser: (isEditingUser) => set({ isEditingUser }),
   fetchUsers: async (page = 1) => {
     try {
-      const response = await fetch(`http://localhost:3000/users?page=${page}`);
+      const response = await fetch(`http://localhost:3000/api/users?page=${page}`);
       const data = await response.json();
 
       const usersData = data.data || {};

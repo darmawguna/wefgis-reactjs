@@ -44,7 +44,7 @@ const SensorForm = ({ onSubmit, initialValues = { description: '', installation_
     const addUser = async (userData) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:3000/sensors${ initialValues.id ? `/${ initialValues.id }` : '' }`, {
+            const response = await fetch(`http://localhost:3000/api/sensors${ initialValues.id ? `/${ initialValues.id }` : '' }`, {
                 method: initialValues.id ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',

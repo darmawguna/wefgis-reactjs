@@ -75,7 +75,7 @@ const UserManagementComponent = () => {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:3000/users/${ userId }`, {
+                const response = await fetch(`http://localhost:3000/api/users/${ userId }`, {
                     method: 'DELETE',
                 });
 
