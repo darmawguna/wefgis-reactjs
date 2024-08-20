@@ -1,49 +1,46 @@
+import { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
 
+const MoistureClient = () => {
+    const [moistureData, setMoistureData] = useState(null);
+    const [connectionStatus, setConnectionStatus] = useState('Menghubungkan...');
 
-const fetchGroundwaterData = async () => {
-    const url = '/groundwater';
-    const data = {
-        geometry: [101.58023369989316, 13.620938502946455],
-        type: 'point',
-        startYear: '2022',
-        endYear: '2023'
-    };
+    useEffect(() => {
+        // Inisialisasi koneksi WebSocket
+        const newSocket = io('http://localhost:3000'); // Ganti dengan URL server Anda
 
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+        // Menangani koneksi berhasil
+        newSocket.on('connect', () => {
+            setConnectionStatus('Terkoneksi');
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${ response.status }`);
-        }
+        // Menangani kesalahan koneksi
+        newSocket.on('connect_error', () => {
+            setConnectionStatus('Gagal terhubung');
+        });
 
-        const result = await response.json();
-        console.log('Groundwater data:', result);
-        return result;
-    } catch (error) {
-        console.error('Error fetching groundwater data:', error);
-    }
+        // Menangani pesan sensorData yang diterima dari server
+        newSocket.on('sensorData', (data) => {
+            setMoistureData(data.value); // Asumsi data berisi nilai kelembapan
+        });
+
+        // Membersihkan socket saat komponen unmounted
+        return () => {
+            newSocket.close();
+        };
+    }, []);
+
+    return (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+            <h1 className="text-3xl font-bold mb-4">Data Kelembapan</h1>
+            <p className="text-lg text-gray-700 mb-2">Status Koneksi: {connectionStatus}</p>
+            {moistureData !== null ? (
+                <p className="text-2xl font-semibold text-green-600">Kelembapan: {moistureData}%</p>
+            ) : (
+                <p className="text-red-600">Tidak ada data kelembapan.</p>
+            )}
+        </div>
+    );
 };
 
-// Contoh penggunaan fungsi
-fetchGroundwaterData().then(data => {
-    if (data) {
-        // Lakukan sesuatu dengan data yang diterima
-        console.log(data);
-    }
-});
-
-
-const PageTesting = () => {
-    return (
-        <h1>hello world</h1>
-    )
-}
-
-export default PageTesting
+export default MoistureClient;
