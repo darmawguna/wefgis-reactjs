@@ -48,7 +48,7 @@ const SensorManagementComponent = () => {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:3000/sensors/${ id }`, {
+                const response = await fetch(`http://localhost:3000/api/sensors/${ id }`, {
                     method: 'DELETE',
                 });
 

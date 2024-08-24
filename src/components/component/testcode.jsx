@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 import io from 'socket.io-client';
@@ -8,117 +8,138 @@ Chart.register(...registerables);
 
 const WaterLevelComponent = () => {
     const [selectedSensor, setSelectedSensor] = useState(0);
-    const [dataPoints, setDataPoints] = useState([]);
+    const [dataPoints, setDataPoints] = useState({});
     const [isConnected, setIsConnected] = useState(false);
     const [latestData, setLatestData] = useState({ time: 'No data', value: 'No data', location: 'No data' });
 
-    const sensors = [
-        { label: 'Sensor 1', id: 'sensor1' },
-        { label: 'Sensor 2', id: 'sensor2' }
-    ];
+    // Define available sensors
+    const sensors = useMemo(() => [
+        { label: 'Sensor 7', id: 7 },
+        { label: 'Sensor 11', id: 11 }
+    ], []);
 
+    // Handle sensor selection
     const handleDropdownChange = (event) => {
         setSelectedSensor(parseInt(event.target.value));
     };
 
+    // Effect to handle WebSocket connection and data handling
     useEffect(() => {
-        const socket = io('http://192.168.43.73:3000/water-levels');
-        // Ganti sesuai endpoint WebSocket kamu
+        const socket = io('http://localhost:3000/water-levels');
+
         socket.on('connect', () => {
             setIsConnected(true);
+            sensors.forEach(sensor => {
+                socket.emit('selectSensor', sensor.id);
+            });
         });
 
         socket.on('disconnect', () => {
             setIsConnected(false);
         });
 
+        socket.on('sensorSelected', (message) => {
+            console.log(message);
+        });
+
         socket.on('water-level', (data) => {
-            // Mengonversi timestamp ke format tanggal (dd-mm-yyyy)
-            const formattedTime = new Date(data.timestamp).toLocaleDateString('en-ID', {
-                day: '2-digit',
-                month: 'long',  // Menampilkan nama bulan (e.g., Januari, Februari)
-                year: 'numeric',
-                timeZone: 'Asia/Bangkok'
-            });
+            const sensorId = data.sensorId;
 
+            // Update the latest data for the selected sensor
+            if (sensorId === sensors[selectedSensor].id) {
+                const formattedTime = new Date(data.timestamp).toLocaleDateString('en-ID', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                    timeZone: 'Asia/Bangkok'
+                });
 
+                const waterLevelInCm = data.water_level;
 
-            // Mengonversi water_level dari meter ke centimeter
-            const waterLevelInCm = data.water_level; // Data langsung dalam centimeter
+                setLatestData({ time: formattedTime, value: waterLevelInCm, location: data.location });
+            }
 
-            // Memperbarui latestData
-            setLatestData({ time: formattedTime, value: waterLevelInCm, location: data.location });
+            // Update data points for all sensors
+            setDataPoints(prevData => {
+                const newData = {
+                    ...prevData,
+                    [sensorId]: (prevData[sensorId] || []).concat({
+                        time: new Date(data.timestamp).toLocaleTimeString('en-ID', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                            hour12: false,
+                            timeZone: 'Asia/Bangkok'
+                        }),
+                        value: data.water_level / 100
+                    })
+                };
 
-            setDataPoints((prevData) => {
-                const newData = [...prevData, {
-                    time: new Date(data.timestamp).toLocaleTimeString('en-ID', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        hour12: false,
-                        timeZone: 'Asia/Bangkok'
-                    }), value: data.water_level / 100
-                }];
-                if (newData.length > 7) { // Membatasi jumlah data yang tampil
-                    newData.shift();
-                }
+                // Limit the data points to the latest 7 points
+                Object.keys(newData).forEach(key => {
+                    if (newData[key].length > 7) {
+                        newData[key] = newData[key].slice(-7);
+                    }
+                });
+
                 return newData;
             });
         });
 
-        // Membersihkan listener saat komponen di-unmount
         return () => {
             socket.off('water-level');
             socket.off('connect');
             socket.off('disconnect');
             socket.disconnect();
         };
-    }, [selectedSensor]);
+    }, [sensors, selectedSensor]);
 
+    // Prepare the chart data for the selected sensor
     const chartData = {
-        labels: dataPoints.map(point => point.time),
+        labels: (dataPoints[sensors[selectedSensor].id] || []).map(point => point.time),
         datasets: [
             {
                 label: sensors[selectedSensor].label,
-                data: dataPoints.map(point => point.value),
-                borderColor: 'rgba(75,192,192,1)', // Warna garis
-                backgroundColor: 'rgba(75,192,192,0.2)', // Warna latar belakang di bawah garis
-                borderWidth: 2, // Ketebalan garis
-                pointBackgroundColor: 'rgba(75,192,192,1)', // Warna titik
-                pointBorderColor: 'rgba(75,192,192,1)', // Warna border titik
-                pointRadius: 5, // Radius titik
-                fill: true, // Mengisi area di bawah garis
+                data: (dataPoints[sensors[selectedSensor].id] || []).map(point => point.value),
+                borderColor: 'rgba(75,192,192,1)',
+                backgroundColor: 'rgba(75,192,192,0.2)',
+                borderWidth: 2,
+                pointBackgroundColor: 'rgba(75,192,192,1)',
+                pointBorderColor: 'rgba(75,192,192,1)',
+                pointRadius: 5,
+                fill: true,
             },
         ],
     };
 
+    // Chart options configuration
     const options = {
         scales: {
             y: {
                 title: {
                     display: true,
-                    text: 'Moisture Level (m)',  // Label pada sumbu y
+                    text: 'Water Level (m)',
                 },
                 beginAtZero: true,
-                min: 0,  // Minimum nilai sumbu y
-                max: 4,  // Maksimum nilai sumbu y
+                min: 0,
+                max: 4,
                 ticks: {
-                    stepSize: 1,  // Interval label setiap 2 meter
+                    stepSize: 1,
                     callback: function (value) {
-                        return value + ' m';  // Menambahkan "m" ke setiap label
+                        return value + ' m';
                     },
                 },
                 grid: {
-                    display: false,  // Menampilkan garis grid pada y-axis
+                    display: false,
                 },
             },
             x: {
                 title: {
                     display: true,
-                    text: 'Time',  // Label pada sumbu x
+                    text: 'Time',
                 },
                 grid: {
-                    display: false,  // Menyembunyikan garis grid pada x-axis
+                    display: false,
                 },
             },
         },
@@ -129,10 +150,10 @@ const WaterLevelComponent = () => {
             <h2 className="text-xl font-semibold">Water Level Section</h2>
             <p>{latestData.location}</p>
             <div className="flex justify-between items-center mb-4">
-                <div> </div>
-                <div className='flex gap-4'>
+                <div></div>
+                <div className="flex gap-4">
                     <p>{latestData.time}</p>
-                    <p className='text-[#4bc0c0]'>{latestData.value} Cm</p>
+                    <p className="text-[#4bc0c0]">{latestData.value} Cm</p>
                 </div>
                 <div>
                     <select
@@ -145,7 +166,6 @@ const WaterLevelComponent = () => {
                         ))}
                     </select>
                 </div>
-
             </div>
             {isConnected ? (
                 <p className="text-green-600">Connected to the server</p>

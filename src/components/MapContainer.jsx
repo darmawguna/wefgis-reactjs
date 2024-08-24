@@ -19,29 +19,6 @@ const indonesiaCoords = [-0.7893, 113.9213]; // Center of Indonesia
 //     { title: 'Danger', jumlahProvinsi: 0, jumlahKabupaten: 0, jumlahKecamatan: 0 },
 // ];
 
-const fetchPrediction = async (region, coords) => {
-    try {
-        const response = await fetch('/predict', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ Region: region, coords: coords }),
-        });
-        const result = await response.json();
-
-        if (result.status === 'success') {
-            const { DEM, TPI, NDVI, NDWI, decision } = result.data;
-            return { DEM, TPI, NDVI, NDWI, decision };
-        } else {
-            console.error('API request failed:', result.message);
-        }
-    } catch (error) {
-        console.error('Error fetching prediction:', error);
-    }
-};
-
-
 const MapInstanceProvider = () => {
     const map = useMap();
     const setMap = useMapStore((state) => state.setMap);
@@ -52,45 +29,11 @@ const MapInstanceProvider = () => {
     return null;
 };
 
-
-
-const createPredictionPopupHTML = ({ DEM, TPI, NDVI, NDWI, decision }) => {
-    return `
-        <div class="p-4 bg-white rounded-lg shadow-md">
-            <h2 class="text-lg font-bold mb-2">Prediction Details</h2>
-            <ul class="list-disc pl-5">
-                <li class="mb-2">
-                    <span class="font-semibold">DEM:</span> ${ DEM }
-                </li>
-                <li class="mb-2">
-                    <span class="font-semibold">TPI:</span> ${ TPI }
-                </li>
-                <li class="mb-2">
-                    <span class="font-semibold">NDVI:</span> ${ NDVI }
-                </li>
-                <li class="mb-2">
-                    <span class="font-semibold">NDWI:</span> ${ NDWI }
-                </li>
-                <li class="mb-2">
-                    <span class="font-semibold">Decision:</span> ${ decision }
-                </li>
-            </ul>
-        </div>
-    `;
-};
-
-
-
-
-
 const MapComponent = () => {
     const activeBasemap = useMapStore((state) => state.activeBasemap);
     const map = useMapStore((state) => state.map);
     // const waterCanalLayer = useMapStore((state) => state.waterCanalLayer);
     const basemaps = useMapStore((state) => state.basemaps);
-    const markerPredictionLayer = useMapStore((state) => state.markerPredictionLayer);
-    const setMarkerPredictionLayer = useMapStore((state) => state.setMarkerPredictionLayer);
-    const deleteMarkerPredictionLayer = useMapStore((state) => state.deleteMarkerPredictionLayer);
 
     useWaterCanalLayerInitialization();
 
@@ -110,49 +53,13 @@ const MapComponent = () => {
             // if (!map.hasLayer(waterCanalLayer)) {
             //     waterCanalLayer.addTo(map);
             // }
-            if (markerPredictionLayer && !map.hasLayer(markerPredictionLayer)) {
-                markerPredictionLayer.addTo(map);
-            }
         }
-    }, [map, activeBasemap, basemaps, markerPredictionLayer]);
-
-    const onCreated = async (e) => {
-        const { layerType, layer } = e;
-        const markerPredictionLayer = useMapStore.getState().markerPredictionLayer;
-        const map = useMapStore.getState().map;
-
-        if (layerType === 'marker') {
-            // Hapus marker sebelumnya jika ada
-            if (markerPredictionLayer) {
-                map.removeLayer(markerPredictionLayer);
-                useMapStore.getState().deleteMarkerPredictionLayer();
-            }
-            const { lat, lng } = layer.getLatLng();
-            const coords = `${ lng }, ${ lat }`;  // Format untuk pengiriman ke API
-            const predictions = await fetchPrediction('Indonesia', coords);
-
-            if (predictions) {
-                const { DEM, TPI, NDVI, NDWI, decision } = predictions;
-                const popupHTML = createPredictionPopupHTML({ DEM, TPI, NDVI, NDWI, decision });
-                layer.bindPopup(popupHTML).openPopup();
-                // Simpan marker baru di global state
-                // useMapStore.getState().setMarkerPredictionLayer(layer);
-                setMarkerPredictionLayer(layer)
-            }
-        } else {
-            console.log(`Layer created: ${ layerType }`);
-        }
-    };
+    }, [map, activeBasemap, basemaps]);
 
 
-    const onDeleted = (e) => {
-        const layers = e.layers;
-        layers.eachLayer((layer) => {
-            if (layer === markerPredictionLayer) {
-                deleteMarkerPredictionLayer();
-            }
-        });
-    };
+
+
+
 
     return (
         <div className="h-full w-full relative" style={{ zIndex: '0' }}>
@@ -167,13 +74,13 @@ const MapComponent = () => {
                 <FeatureGroup>
                     <EditControl
                         position="topleft"
-                        onCreated={onCreated}
+                        // onCreated={}
                         draw={{
                             rectangle: false,
                             circle: false,
                             circlemarker: false
                         }}
-                        onDeleted={onDeleted}
+
                     />
                 </FeatureGroup>
             </MapContainer>
