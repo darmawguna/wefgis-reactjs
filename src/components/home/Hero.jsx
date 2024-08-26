@@ -12,7 +12,6 @@ const HeroComponent = () => {
                 {/* Section untuk Background */}
                 <BackgroundComponent />
                 {/* Section untuk User Guide */}
-                
             </div>
         </>
     );

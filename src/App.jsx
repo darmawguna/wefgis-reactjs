@@ -12,6 +12,7 @@ import DashboardComponent from './components/dashboard/DashboardComponent';
 
 
 import HomePage from './pages/homepage/homepage';
+import MapPage from './pages/mappage/mappage';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             </Route>
             {/* <Route path="/login" element={<LoginPage />} /> */}
             <Route path="testing" element={<HomePage />} />
+            <Route path="testingmap" element={<MapPage />} />
           </Routes>
         </div>
       </Router>

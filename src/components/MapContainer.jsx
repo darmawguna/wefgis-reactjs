@@ -1,23 +1,12 @@
-import { useEffect } from 'react';
-import { MapContainer, TileLayer, useMap, FeatureGroup } from 'react-leaflet';
-import { EditControl } from 'react-leaflet-draw';
-import 'leaflet-draw/dist/leaflet.draw.css';
+import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-// import ReportCard from './CardWarning';
 import SidebarController from '../layouts/map/SideBarMapController';
 import SidebarIcons from '../layouts/map/SidebarIcon';
 import { useMapStore } from '../store/MapStore';
 import useWaterCanalLayerInitialization from './custom-hooks/WaterCanalHooks';
 
-
-
-const indonesiaCoords = [-0.7893, 113.9213]; // Center of Indonesia
-
-// const hazardData = [
-//     { title: 'Alert', jumlahProvinsi: 15, jumlahKabupaten: 55, jumlahKecamatan: 200 },
-//     { title: 'Standby', jumlahProvinsi: 3, jumlahKabupaten: 6, jumlahKecamatan: 9 },
-//     { title: 'Danger', jumlahProvinsi: 0, jumlahKabupaten: 0, jumlahKecamatan: 0 },
-// ];
+const indonesiaCoords = [-0.7893, 113.9213];
 
 const MapInstanceProvider = () => {
     const map = useMap();
@@ -29,41 +18,57 @@ const MapInstanceProvider = () => {
     return null;
 };
 
+const useZoomControlState = () => {
+    const [zoomEnabled, setZoomEnabled] = useState(window.innerWidth >= 768);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setZoomEnabled(window.innerWidth >= 768); // True untuk desktop, false untuk mobile
+        };
+
+        handleResize(); // Set initial state
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup event listener on component unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    return zoomEnabled;
+};
+
+
 const MapComponent = () => {
     const activeBasemap = useMapStore((state) => state.activeBasemap);
     const map = useMapStore((state) => state.map);
-    // const waterCanalLayer = useMapStore((state) => state.waterCanalLayer);
     const basemaps = useMapStore((state) => state.basemaps);
+    const zoomEnabled = useZoomControlState();
+    console.log('zoomEnabled', zoomEnabled);
 
     useWaterCanalLayerInitialization();
 
     useEffect(() => {
         if (map && activeBasemap) {
-            // Remove all existing basemap layers if they exist on the map
             basemaps.forEach(basemap => {
                 if (map.hasLayer(basemap.layer)) {
                     map.removeLayer(basemap.layer);
                 }
             });
-            // Add the active basemap layer to the map
             if (!map.hasLayer(activeBasemap.layer)) {
                 activeBasemap.layer.addTo(map);
             }
-            // Add back the water canal layer to the map
-            // if (!map.hasLayer(waterCanalLayer)) {
-            //     waterCanalLayer.addTo(map);
-            // }
         }
     }, [map, activeBasemap, basemaps]);
 
-
-
-
-
-
     return (
         <div className="h-full w-full relative" style={{ zIndex: '0' }}>
-            <MapContainer center={indonesiaCoords} zoom={6} style={{ height: '100%', width: '100%', zIndex: '0' }}>
+            <MapContainer
+                center={indonesiaCoords}
+                zoom={6}
+                style={{ height: '100%', width: '100%', zIndex: '0' }}
+                zoomControl={zoomEnabled} // Gunakan state untuk mengontrol visibilitas zoom control
+            >
                 <MapInstanceProvider />
                 {activeBasemap && (
                     <TileLayer
@@ -71,30 +76,11 @@ const MapComponent = () => {
                         url={activeBasemap.layer._url}
                     />
                 )}
-                <FeatureGroup>
-                    <EditControl
-                        position="topleft"
-                        // onCreated={}
-                        draw={{
-                            rectangle: false,
-                            circle: false,
-                            circlemarker: false
-                        }}
-
-                    />
-                </FeatureGroup>
             </MapContainer>
             <div className='absolute top-16 right-0 z-50 mr-2'>
                 <SidebarIcons />
                 <SidebarController />
             </div>
-            {/* <div className="absolute bottom-0 left-0 w-full z-10 flex justify-around items-end">
-                <div className="p-3 gap-3 flex w-full justify-around">
-                    {hazardData.map((hazard) => (
-                        <ReportCard key={hazard.title} {...hazard} />
-                    ))}
-                </div>
-            </div> */}
         </div>
     );
 };
