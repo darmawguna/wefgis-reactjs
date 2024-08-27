@@ -22,8 +22,8 @@ function App() {
         <div className="App">
           {/* <Navbar /> */}
           <Routes>
-            <Route path="/" element={ <LandingPage/>} />
-            <Route path="/map" element={<MapBar />} />
+            <Route path="/testing" element={<LandingPage />} />
+            <Route path="/testingmap" element={<MapBar />} />
             {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
             <Route path="/dashboard" element={<DashboardPage />}>
               <Route path='' element={<DashboardComponent />} />
@@ -31,8 +31,8 @@ function App() {
               <Route path="sensor-management" element={<SensorManagementComponent />} />
             </Route>
             {/* <Route path="/login" element={<LoginPage />} /> */}
-            <Route path="testing" element={<HomePage />} />
-            <Route path="testingmap" element={<MapPage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/map" element={<MapPage />} />
           </Routes>
         </div>
       </Router>
