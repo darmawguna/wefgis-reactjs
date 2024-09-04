@@ -4,7 +4,7 @@ import { useMapStore } from '../../store/MapStore';
 import sensorblack from '../../assets/sensorblack.png';
 
 const useSensorLayerInitialization = () => {
-    const sensors = useMapStore((state) => state.sensors);
+    const sensors = useMapStore((state) => state.sensor);
     const sensorLayer = useMapStore((state) => state.sensorLayer);
     const setSensorLayer = useMapStore((state) => state.setSensorLayer);
     const addLayer = useMapStore((state) => state.addLayer);
@@ -14,13 +14,14 @@ const useSensorLayerInitialization = () => {
             if (sensors && sensors.length > 0 && !sensorLayer) {
                 const markers = L.layerGroup(
                     sensors.map(sensor => {
+                        console.log(sensor)
                         const customIcon = L.icon({
                             iconUrl: sensorblack,
                             iconSize: [36, 36], // Sesuaikan dengan ukuran gambar marker Anda
                             popupAnchor: [0, -10] // Sesuaikan posisi popup jika diperlukan
                         });
                         const marker = L.marker([parseFloat(sensor.latitude), parseFloat(sensor.longitude)], { icon: customIcon })
-                            .bindPopup(`<b>${ sensor.name }</b><br>${ sensor.description }`);
+                            .bindPopup(`<b>${ sensor.id }</b><br>${ sensor.description }`);
 
                         let polygon = null;
                         if (sensor.polygon) {
@@ -38,6 +39,7 @@ const useSensorLayerInitialization = () => {
 
                 setSensorLayer(markers);
                 addLayer("sensor", markers); // Tambahkan ke layer global
+                
             }
         };
 

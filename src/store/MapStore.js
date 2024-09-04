@@ -19,6 +19,11 @@ export const useSidebarStore = create((set) => ({
   // setMap: (map) => set({ map }),
 }));
 
+export const usePopupMarkerStore = create((set) => ({
+  isOpenMarker: false,
+  setOpenMarker: () => set((state) => ({ isOpen: !state.isOpen })),
+}));
+
 export const useMapStore = create((set) => ({
   // state untuk menyimpan layer yang ada
   layers: [

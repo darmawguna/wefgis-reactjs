@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, } from 'react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import SidebarController from '../layouts/map/SideBarMapController';
 import SidebarIcons from '../layouts/map/SidebarIcon';
 import { useMapStore } from '../store/MapStore';
 import useWaterCanalLayerInitialization from './custom-hooks/WaterCanalHooks';
+import useDeviceTypeState from './custom-hooks/DeviceTypeHooks';
 
 const indonesiaCoords = [-0.7893, 113.9213];
 
@@ -18,33 +19,16 @@ const MapInstanceProvider = () => {
     return null;
 };
 
-const useZoomControlState = () => {
-    const [zoomEnabled, setZoomEnabled] = useState(window.innerWidth >= 768);
 
-    useEffect(() => {
-        const handleResize = () => {
-            setZoomEnabled(window.innerWidth >= 768); // True untuk desktop, false untuk mobile
-        };
-
-        handleResize(); // Set initial state
-        window.addEventListener('resize', handleResize);
-
-        // Cleanup event listener on component unmount
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
-    return zoomEnabled;
-};
 
 
 const MapComponent = () => {
     const activeBasemap = useMapStore((state) => state.activeBasemap);
     const map = useMapStore((state) => state.map);
     const basemaps = useMapStore((state) => state.basemaps);
-    const zoomEnabled = useZoomControlState();
-    console.log('zoomEnabled', zoomEnabled);
+    // const zoomEnabled = useZoomControlState();
+    const { zoomEnabled, isMobile } = useDeviceTypeState();
+    console.log('isMobile', isMobile);
 
     useWaterCanalLayerInitialization();
 
@@ -72,7 +56,7 @@ const MapComponent = () => {
                 <MapInstanceProvider />
                 {activeBasemap && (
                     <TileLayer
-                        attribution={activeBasemap.layer.options.attribution}
+                        attribution={activeBasemap.layer.attribution}
                         url={activeBasemap.layer._url}
                     />
                 )}
