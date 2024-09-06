@@ -31,7 +31,7 @@ const SidebarController = () => {
     }, [map, content, activeLayers]);
 
     return (
-        <div className={`fixed top-16 right-0 h-full w-64 bg-white shadow-lg transform ${ isOpen ? 'translate-x-0' : 'translate-x-full' } transition-transform duration-300 z-40`}>
+        <div className={`fixed top-16 md:top-20 right-0 h-full w-64 bg-white shadow-lg transform ${ isOpen ? 'translate-x-0' : 'translate-x-full' } transition-transform duration-300 z-40`}>
             <div className="p-4 flex justify-between items-center border-b">
                 <h2 className="text-xl font-semibold">{content}</h2>
                 <button onClick={handleClose} className="text-xl">&times;</button>

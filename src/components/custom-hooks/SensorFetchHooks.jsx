@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useMapStore } from '../../store/MapStore';
 const useFetchSensorData = () => {
     const setSensor = useMapStore((state) => state.setSensor);
-    const sensor = useMapStore((state) => state.sensor);
+
 
     useEffect(() => {
         const fetchSensorData = async () => {
@@ -13,12 +13,16 @@ const useFetchSensorData = () => {
                         'Content-Type': 'application/json'
                     }
                 });
+                // Pastikan untuk memeriksa apakah respons berhasil
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${ response.status }`);
+                }
+
                 const result = await response.json();
-                const data = result.data;
-                console.log(data);
-                if (result.statusCode === 200) {
-                    setSensor(data.sensors);
-                    console.log(data);
+                const sensors = result.data.sensors;
+                // Mengakses data dari respons
+                if (result.message === "Sensors fetched successfully") {
+                    setSensor(sensors); // Ambil sensors dari data
                 }
             } catch (error) {
                 console.error('Error fetching sensor data:', error);
@@ -26,7 +30,7 @@ const useFetchSensorData = () => {
         };
 
         fetchSensorData();
-    }, [setSensor, sensor]);
+    }, [setSensor]);
 };
 
 export default useFetchSensorData;

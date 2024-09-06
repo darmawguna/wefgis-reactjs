@@ -52,7 +52,6 @@ const SensorManagementComponent = () => {
         });
 
         if (result.isConfirmed) {
-            // TODO perbaiki error method delete
             try {
                 const response = await fetch(`http://localhost:3000/api/sensors/${ id }`, {
                     method: 'DELETE',

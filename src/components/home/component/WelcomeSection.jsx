@@ -20,7 +20,7 @@ const WelcomeSectionComponent = () => {
             </div>
             {/* <div className="flex items-center justify-center space-x-4"> */}
             <div className="flex flex-col md:flex-row md:gap-4 items-center justify-center w-full space-y-2 md:space-y-0">
-                <a href="#" className="bg-purple-600 text-white py-3 px-6 rounded-full hover:bg-purple-700 transition duration-300 w-full max-w-xs text-center md:rounded-lg md:w-36">
+                <a href="/map" className="bg-purple-600 text-white py-3 px-6 rounded-full hover:bg-purple-700 transition duration-300 w-full max-w-xs text-center md:rounded-lg md:w-36">
                     Get Started
                 </a>
 

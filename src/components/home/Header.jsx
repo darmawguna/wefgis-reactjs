@@ -15,7 +15,7 @@ const Header = () => {
                 <h1 className="text-lg font-bold ml-2 md:text-xl">WEF GIS</h1>
             </div>
             <nav className="hidden md:flex space-x-6">
-                <a href="#" className="text-gray-700 hover:text-blue-600">Welcome</a>
+                <a href="/" className="text-gray-700 hover:text-blue-600">Welcome</a>
                 <a href="#" className="text-gray-700 hover:text-blue-600">Background</a>
                 <a href="#" className="text-gray-700 hover:text-blue-600">Water Level Monitoring</a>
                 <a href="#" className="text-gray-700 hover:text-blue-600">Join To Know</a>
@@ -47,7 +47,7 @@ const Header = () => {
                         </button>
                     </div>
                     <nav className="mt-4 space-y-4">
-                        <a href="#" className="text-gray-700 hover:text-blue-600 block">Welcome</a>
+                        <a href="/" className="text-gray-700 hover:text-blue-600 block">Welcome</a>
                         <a href="#" className="text-gray-700 hover:text-blue-600 block">Background</a>
                         <a href="#" className="text-gray-700 hover:text-blue-600 block">Water Level Monitoring</a>
                         <a href="#" className="text-gray-700 hover:text-blue-600 block">Join To Know</a>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+// TODO perbaiki code untuk memastikan ukuran navbar tidak terlalu lebar
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -18,7 +18,7 @@ export default function Navbar() {
           </a>
         </div>
         <nav className="hidden md:flex space-x-6">
-          <a href="#welcome" className="text-gray-700 hover:text-blue-600">Welcome</a>
+          <a href="/" className="text-gray-700 hover:text-blue-600">Welcome</a>
           <a href="#background" className="text-gray-700 hover:text-blue-600">Background</a>
           <a href="#data-specs" className="text-gray-700 hover:text-blue-600">Data Specs</a>
           <a href="#user-guide" className="text-gray-700 hover:text-blue-600">User Guide</a>
@@ -51,7 +51,7 @@ export default function Navbar() {
             </button>
           </div>
           <nav className="mt-4 space-y-4">
-            <a href="#welcome" className="text-gray-700 hover:text-blue-600 block">Welcome</a>
+            <a href="/" className="text-gray-700 hover:text-blue-600 block">Welcome</a>
             <a href="#background" className="text-gray-700 hover:text-blue-600 block">Background</a>
             <a href="#data-specs" className="text-gray-700 hover:text-blue-600 block">Data Specs</a>
             <a href="#user-guide" className="text-gray-700 hover:text-blue-600 block">User Guide</a>

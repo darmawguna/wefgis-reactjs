@@ -13,7 +13,7 @@ const BackgroundComponent = () => {
                 </div>
 
                 <div className="md:w-1/2 space-y-6 text-left px-4 md:px-0">
-                    <div>
+                    <div className="p-4">
                         <div className="flex items-center justify-center">
                             <h2 className="text-lg md:text-2xl font-semibold text-purple-600 uppercase mb-12">
                                 Background

@@ -20,6 +20,7 @@ export const useSidebarStore = create((set) => ({
 }));
 
 export const usePopupMarkerStore = create((set) => ({
+  // TODO cari cara agar logika sidebar dapat muncul terus ketika berganti marker yang di click
   isOpenMarker: false,
   setOpenMarker: () => set((state) => ({ isOpen: !state.isOpen })),
 }));
@@ -67,9 +68,11 @@ export const useMapStore = create((set) => ({
   waterCanalLayer: null,
   setWaterCanalLayer: (layer) => set({ waterCanalLayer: layer }),
 
-  // TODO buat sebuah state untuk menyimpan layergroup Sensor dari API
   sensor: [],
   setSensor: (data) => set({ sensor: data }),
+
+  selectedSensor: null,
+  setSelectedSensor: (sensor) => set({ selectedSensor: sensor }),
 
   sensorLayer: null,
   setSensorLayer: (layer) => set({ sensorLayer: layer }),
