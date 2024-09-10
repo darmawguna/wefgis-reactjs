@@ -1,22 +1,27 @@
 import { Line } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 import { useMapStore } from '../../store/MapStore';
-import useWaterLevelData from '../custom-hooks/useWaterLavel';
+// import useWaterLevelData from '../custom-hooks/useWaterLavel'; // Pastikan nama hook benar
+import { useWaterLevelStore } from '../../store/WaterLevelStore';
 
 // Register Chart.js components
 Chart.register(...registerables);
 
 const WaterLevelGraph = () => {
     const selectedSensor = useMapStore((state) => state.selectedSensor);
-    const { dataPoints, isConnected, latestData } = useWaterLevelData(selectedSensor);
+    // const { dataPoints, latestData } = useWaterLevelData();
+    const dataPoints = useWaterLevelStore((state) => state.dataPoints);
+    const latestData = useWaterLevelStore((state) => state.latestData);
+    console.log(latestData)
 
     // Prepare the chart data for the selected sensor
+    const sensorId = selectedSensor?.id;
     const chartData = {
-        labels: (dataPoints[selectedSensor.id] || []).map(point => point.time),
+        labels: (dataPoints[sensorId] || []).map(point => point.time),
         datasets: [
             {
-                label: 'Sensor ' + selectedSensor.id,
-                data: (dataPoints[selectedSensor.id] || []).map(point => point.value),
+                label: 'Sensor ' + (sensorId || 'Unknown'),
+                data: (dataPoints[sensorId] || []).map(point => point.value),
                 borderColor: 'rgba(75,192,192,1)',
                 backgroundColor: 'rgba(75,192,192,0.2)',
                 borderWidth: 2,
@@ -62,36 +67,31 @@ const WaterLevelGraph = () => {
     };
 
     return (
-        <div className="max-w-full mx-auto bg-white rounded-lg">
+        <div className="max-w-full mx-auto bg-white rounded-lg p-4">
             <h2 className="text-xl font-semibold">Water Level Section</h2>
             {
-                latestData.location === 'No data' ? (
-                    <p>Location not found</p>
+                latestData[sensorId]?.location ? (
+                    <p>{latestData[sensorId].location}</p>
                 ) : (
-                    <p>{latestData.location}</p>
+                    <p>Location not found</p>
                 )
             }
             <div className="flex justify-between mb-4 gap-4">
                 {
-                    latestData.time === 'No data' ? (
-                        <p>Data not found</p>
+                    latestData[sensorId]?.time ? (
+                        <p>{latestData[sensorId].time}</p>
                     ) : (
-                        <p>{latestData.time}</p>
+                        <p>Data not found</p>
                     )
                 }
                 {
-                    latestData.value === 'No data' ? (
-                        <p>Data not found</p>
+                    latestData[sensorId]?.value !== undefined ? (
+                        <p className="text-[#4bc0c0]">{latestData[sensorId].value} Cm</p>
                     ) : (
-                        <p className="text-[#4bc0c0]">{latestData.value} Cm</p>
+                        <p>Data not found</p>
                     )
                 }
             </div>
-            {isConnected ? (
-                <p className="text-green-600">Connected to the server</p>
-            ) : (
-                <p className="text-red-600">Disconnected from the server</p>
-            )}
             <div className="">
                 <Line data={chartData} options={options} />
             </div>

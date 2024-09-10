@@ -1,79 +1,91 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import io from "socket.io-client";
+import { useWaterLevelStore } from "../../store/WaterLevelStore";
+import { useMapStore } from "../../store/MapStore";
 
-const useWaterLevelData = (sensor) => {
-  const [dataPoints, setDataPoints] = useState({});
-  const [isConnected, setIsConnected] = useState(false);
-  const [latestData, setLatestData] = useState({ time: "No data", value: "No data", location: "No data" });
+const useWaterLevelData = () => {
+  const sensors = useMapStore((state) => state.sensor); 
+  const [sensorsReady, setSensorsReady] = useState(false);
+  const setDataPoints = useWaterLevelStore((state) => state.setDataPoints);
+  const setLatestData = useWaterLevelStore((state) => state.setLatestData);
+  // const dataPoints = useWaterLevelStore((state) => state.dataPoints);
+  // const latestData = useWaterLevelStore((state) => state.latestData);
 
   useEffect(() => {
-    const socket = io("http://localhost:3000/water-levels");
+    if (sensors && sensors.length > 0) {
+      setSensorsReady(true);
+    } else {
+      setSensorsReady(false);
+    }
+  }, [sensors]);
 
-    socket.on("connect", () => {
-      setIsConnected(true);
-      socket.emit("selectSensor", sensor.id);
+  useEffect(() => {
+    if (!sensorsReady || !sensors) {
+      return;
+    }
+
+    const newSocket = io("http://localhost:3000/water-levels", {
+      transports: ["websocket"], // Paksa penggunaan websocket
+      reconnection: true,
+      reconnectionAttempts: Infinity,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
     });
 
-    socket.on("disconnect", () => {
-      setIsConnected(false);
+    newSocket.on("connect", () => {
+      sensors.forEach((sensor) => {
+        newSocket.emit("selectSensor", sensor.id);
+      });
     });
 
-    socket.on("sensorSelected", (message) => {
-      console.log(message);
+    newSocket.on("connect_error", (err) => {
+      console.error("Connection error:", err);
     });
 
-    socket.on("water-level", (data) => {
+    newSocket.on("water-level", (data) => {
       const sensorId = data.sensorId;
 
-      // Update the latest data for the selected sensor
-      if (sensorId === sensor.id) {
-        // TODO pastikan agar semua data tersimpan dan ketika tidak memilih sensor koneksi websocket tetap terhubung
-        const formattedTime = new Date(data.timestamp).toLocaleDateString("en-ID", {
+      setLatestData(sensorId, {
+        time: new Date(data.timestamp).toLocaleDateString("en-ID", {
           day: "2-digit",
           month: "long",
           year: "numeric",
           timeZone: "Asia/Bangkok",
-        });
-
-        const waterLevelInCm = data.water_level;
-
-        setLatestData({ time: formattedTime, value: waterLevelInCm, location: data.location });
-      }
-
-      // Update data points for all sensors
-      setDataPoints((prevData) => {
-        const newData = {
-          ...prevData,
-          [sensorId]: (prevData[sensorId] || []).concat({
-            time: new Date(data.timestamp).toLocaleTimeString("en-ID", {
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-              hour12: false,
-              timeZone: "Asia/Bangkok",
-            }),
-            value: data.water_level / 100,
-          }),
-        };
-
-        // Limit the data points to the latest 7 points
-        if (newData[sensorId].length > 7) {
-          newData[sensorId] = newData[sensorId].slice(-7);
-        }
-
-        return newData;
+        }),
+        value: data.water_level / 100,
+        location: data.location,
       });
+
+      const newPoint = {
+        time: new Date(data.timestamp).toLocaleTimeString("en-ID", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+          timeZone: "Asia/Bangkok",
+        }),
+        value: data.water_level / 100,
+      };
+
+      // Menyimpan newPoint ke dataPoints
+      setDataPoints(sensorId, newPoint); // Fungsi ini menambahkan data baru ke array dataPoints
     });
 
     return () => {
-      socket.off("water-level");
-      socket.off("connect");
-      socket.off("disconnect");
-      socket.disconnect();
+      if (newSocket) {
+        newSocket.off("water-level");
+        newSocket.disconnect();
+        console.log("Socket disconnected.");
+      }
     };
-  }, [sensor,]);
+  }, [sensorsReady, sensors, setDataPoints, setLatestData]);
 
-  return { dataPoints, isConnected, latestData };
+  // console.log(latestData)
+
+  return {
+    dataPoints: useWaterLevelStore((state) => state.dataPoints),
+    latestData: useWaterLevelStore((state) => state.latestData),
+  };
 };
 
 export default useWaterLevelData;
