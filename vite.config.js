@@ -22,6 +22,11 @@ export default defineConfig({
         changeOrigin: true,
         // rewrite: (path) => path.replace(/^\/groundwater/, "/groundwater"),
       },
+      "/socket.io": {
+        target: "http://localhost:3000/water-levels",
+        changeOrigin: true,
+        ws: true,
+      },
       // "/api/water": {
       //   target: "http://178.16.142.61:8092", // URL server Flask untuk endpoint lainnya
       //   changeOrigin: true,

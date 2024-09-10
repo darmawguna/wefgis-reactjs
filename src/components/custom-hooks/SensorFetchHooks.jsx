@@ -19,10 +19,15 @@ const useFetchSensorData = () => {
                 }
 
                 const result = await response.json();
-                const sensors = result.data.sensors;
+                const data = result.data;
+                const sensors = data.sensors;
+                // console.log("nilai dari data", data)
+
                 // Mengakses data dari respons
                 if (result.message === "Sensors fetched successfully") {
+
                     setSensor(sensors); // Ambil sensors dari data
+
                 }
             } catch (error) {
                 console.error('Error fetching sensor data:', error);

@@ -14,7 +14,7 @@ const WaterLevelComponent = () => {
 
     // Define available sensors
     const sensors = useMemo(() => [
-        { label: 'Sensor 7', id: 7 },
+        { label: 'Sensor 12', id: 12 },
         { label: 'Sensor 11', id: 11 }
     ], []);
 
