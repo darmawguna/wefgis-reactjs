@@ -40,7 +40,6 @@ const DashboardComponent = () => {
                                 <WaterLevelComponent />
                             </div>
                             <div className="flex-1 rounded-lg  ml-2 p-4">
-                                {/* TODO: buat sebuah component untuk warning History */}
                                 <MoistureComponent />
                             </div>
                         </div>

@@ -48,7 +48,7 @@ const SensorManagementComponent = () => {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:3000/api/sensors/${ id }`, {
+                const response = await fetch(`https://api.fmews.wefgis.com/api/sensors/${ id }`, {
                     method: 'DELETE',
                 });
 

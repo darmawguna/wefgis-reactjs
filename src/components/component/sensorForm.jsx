@@ -44,7 +44,7 @@ const SensorForm = ({ onSubmit, initialValues = { description: '', installation_
     const addUser = async (userData) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:3000/api/sensors${ initialValues.id ? `/${ initialValues.id }` : '' }`, {
+            const response = await fetch(`https://api.fmews.wefgis.com/api/sensors${ initialValues.id ? `/${ initialValues.id }` : '' }`, {
                 method: initialValues.id ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -78,8 +78,6 @@ const SensorForm = ({ onSubmit, initialValues = { description: '', installation_
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // Validate all inputs
         // Validate all inputs
         if (!description || !status || !location || latitude === null || longitude === null || !installation_date) {
             setError('Please fill out all fields.');

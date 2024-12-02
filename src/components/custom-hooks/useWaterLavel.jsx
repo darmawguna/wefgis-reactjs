@@ -24,7 +24,7 @@ const useWaterLevelData = () => {
       return;
     }
 
-    const newSocket = io("http://localhost:3000/water-levels", {
+    const newSocket = io("https://api.fmews.wefgis-sync.com/water-levels", {
       transports: ["websocket"], // Paksa penggunaan websocket
       reconnection: true,
       reconnectionAttempts: Infinity,

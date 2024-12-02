@@ -15,7 +15,8 @@ const UserManagementStore = create((set) => ({
   setIsEditingUser: (isEditingUser) => set({ isEditingUser }),
   fetchUsers: async (page = 1) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/users?page=${page}`);
+      const response = await fetch(`http://api.fmews.wefgis.com/api/users?page=${page}`);
+      // TODO ubah alamat api menjadi https://api.fmews.wefgis-sync.com/api/users?page=
       const data = await response.json();
 
       const usersData = data.data || {};

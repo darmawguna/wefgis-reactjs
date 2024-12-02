@@ -47,7 +47,7 @@ const UserFormWithMap = ({ onSubmit, initialValues = { name: '', email: '', phon
     const addUser = async (userData) => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:3000/api/users${ initialValues.id ? `/${ initialValues.id }` : '' }`, {
+            const response = await fetch(`https://api.fmews.wefgis.com/api/users${ initialValues.id ? `/${ initialValues.id }` : '' }`, {
                 method: initialValues.id ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',

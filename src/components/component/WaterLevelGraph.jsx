@@ -95,6 +95,7 @@ const WaterLevelGraph = () => {
             <div className="">
                 <Line data={chartData} options={options} />
             </div>
+            
         </div>
     );
 };

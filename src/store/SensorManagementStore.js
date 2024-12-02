@@ -14,7 +14,8 @@ const SensorManagementStore = create((set) => ({
   setIsDetailSensor: (isDetailSensor) => set({ isDetailSensor }),
   fetchSensors: async (page = 1) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/sensors?page=${page}`);
+      const response = await fetch(`https://api.fmews.wefgis.com/api/sensors?page=${page}`);
+      // TODO ubah alamat api menjadi https://api.fmews.wefgis-sync.com/api/sensors?page=
       const data = await response.json();
 
       const sensorsData = data.data || {};

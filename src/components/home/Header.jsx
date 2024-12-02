@@ -1,5 +1,6 @@
 // src/components/Header.js
-import  { useState } from 'react';
+import { useState } from 'react';
+import logo from '../../../public/logo.png';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -11,8 +12,8 @@ const Header = () => {
     return (
         <header className=" flex items-center justify-between p-4 md:p-6">
             <div className="flex items-center">
-                <img src="/public/logo.png" alt="Logo" className="h-8 md:h-10" />
-                <h1 className="text-lg font-bold ml-2 md:text-xl">WEF GIS</h1>
+                <img src={logo} alt="Logo" className="h-8 md:h-10" />
+                <h1 className="text-lg font-bold ml-2 md:text-xl">FMEWS</h1>
             </div>
             <nav className="hidden md:flex space-x-6">
                 <a href="/" className="text-gray-700 hover:text-blue-600">Welcome</a>

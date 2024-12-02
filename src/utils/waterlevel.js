@@ -21,7 +21,8 @@ const useWaterLevelData = () => {
 
   // Handle WebSocket connection and data handling
   useEffect(() => {
-    const socket = io("http://localhost:3000/water-levels");
+    const socket = io("https://api.fmews.wefgis.com/water-levels");
+    // TODO ubah alamat api menjadi https://api.fmews.wefgis-sync.com/water-levels
 
     socket.on("connect", () => {
       setIsConnected(true);

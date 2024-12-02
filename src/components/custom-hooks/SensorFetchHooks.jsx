@@ -8,7 +8,8 @@ const useFetchSensorData = () => {
     useEffect(() => {
         const fetchSensorData = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/sensors/', {
+                const response = await fetch('https://api.fmews.wefgis.com/api/sensors/', {
+                // TODO ubah alamat api menjadi https://api.fmews.wefgis-sync.com/api/sensors
                     headers: {
                         'Content-Type': 'application/json'
                     }

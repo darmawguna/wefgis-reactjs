@@ -1,4 +1,8 @@
 import L from "leaflet";
+import openstreetmap_de from "../../public/assets/icon-basemap/openstreetmap_de.png";
+import googlestreets from "../../public/assets/icon-basemap/google-streets.png";
+import googleearth from "../../public/assets/icon-basemap/google-earth.png";
+import googlehibrid from "../../public/assets/icon-basemap/google-hibrid.png";
 
 export const baseMaps = [
   {
@@ -6,7 +10,7 @@ export const baseMaps = [
     layer: L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "©OpenStreetMap Contributors",
     }),
-    imageUrl: "/public/assets/icon-basemap/openstreetmap_de.png",
+    imageUrl:  openstreetmap_de ,
   },
   {
     name: "Google Street Map",
@@ -15,7 +19,7 @@ export const baseMaps = [
       subdomains: ["mt0", "mt1", "mt2", "mt3"],
       maxZoom: 20,
     }),
-    imageUrl: "/public/assets/icon-basemap/google-streets.png",
+    imageUrl:  googlestreets ,
   },
   {
     name: "Google Satellite Map",
@@ -24,7 +28,7 @@ export const baseMaps = [
       subdomains: ["mt0", "mt1", "mt2", "mt3"],
       maxZoom: 20,
     }),
-    imageUrl: "/public/assets/icon-basemap/google-earth.png",
+    imageUrl:  googleearth ,
   },
   {
     name: "Google Hybrid Map",
@@ -33,7 +37,7 @@ export const baseMaps = [
       subdomains: ["mt0", "mt1", "mt2", "mt3"],
       maxZoom: 20,
     }),
-    imageUrl: "/public/assets/icon-basemap/google-hibrid.png",
+    imageUrl:  googlehibrid ,
   },
   // Add more basemaps here (optional)
 ];

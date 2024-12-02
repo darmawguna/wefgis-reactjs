@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import logo from "../../public/logo.png";
 // TODO perbaiki code untuk memastikan ukuran navbar tidak terlalu lebar
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
@@ -12,9 +12,9 @@ export default function Navbar() {
     <>
       <header className="flex items-center justify-between p-4 md:p-6 top-0 z-10 bg-white shadow-md">
         <div className="flex items-center">
-          <img src="/public/logo.png" alt="Logo" className="h-6 md:h-8" />
+          <img src={logo} alt="Logo" className="h-6 md:h-8" />
           <a className="text-lg font-bold ml-2 md:text-xl" href="/">
-            WEF GIS
+            FMEWS
           </a>
         </div>
         <nav className="hidden md:flex space-x-6">
@@ -24,9 +24,9 @@ export default function Navbar() {
           <a href="#user-guide" className="text-gray-700 hover:text-blue-600">User Guide</a>
         </nav>
         <div className="hidden md:flex">
-          <Link to="/dashboard" className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700">
+          {/* <Link to="/dashboard" className="bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700">
             Login &rarr;
-          </Link>
+          </Link> */}
         </div>
         <button className="md:hidden" onClick={handleToggle}>
           <svg

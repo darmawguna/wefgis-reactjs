@@ -9,8 +9,6 @@ import Swal from 'sweetalert2';
 const UserManagementComponent = () => {
     const headers = ["name", "email", "phone_number", "location"];
     const { users, totalPages, currentPage, fetchUsers, setCurrentPage, isAddingUser, setIsAddingUser, isEditingUser, setIsEditingUser } = UserManagementStore();
-    // const [isAddingUser, setIsAddingUser] = useState(false);
-    // const [isEditingUser, setIsEditingUser] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
 
@@ -75,7 +73,7 @@ const UserManagementComponent = () => {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:3000/api/users/${ userId }`, {
+                const response = await fetch(`https://api.fmews.wefgis.com/api/users/${ userId }`, {
                     method: 'DELETE',
                 });
 
@@ -90,7 +88,6 @@ const UserManagementComponent = () => {
                 Swal.fire('Error!', 'Failed to delete user.', 'error');
             }
         }
-
     };
     return (
         <div className="flex flex-col p-4 h-full overflow-y-auto ">
